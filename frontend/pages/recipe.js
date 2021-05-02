@@ -88,8 +88,8 @@ export default function recipe() {
     ])
 
     return (
-        <Flex paddingX="20" paddingY="10" height="93vh" flexDirection="column">
-            <Box marginBottom="10">
+        <Flex alignItems="center" paddingY="10" height="93vh" flexDirection="column">
+            <Box textAlign="start" marginBottom="10">
                 <a className="big-medium">Your Recipes</a>
             </Box>
             <Flex>

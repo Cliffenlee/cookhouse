@@ -1,12 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
-import { Button } from "@chakra-ui/react"
+import { Box, Button } from "@chakra-ui/react"
 
 export default function NavBarLink({ name, link }) {
     return (
-        <Button colorScheme="orange" variant="link" mx="5">
+        <Button width="5vw" colorScheme="orange" variant="link">
             <Link href={link}>
-                <a >{name}</a>
+                <a>{name}</a>
             </Link>
         </Button>
     )

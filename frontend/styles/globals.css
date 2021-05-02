@@ -32,9 +32,13 @@ a {
   font-size: 40px;
 }
 
-.image {
-  cursor: pointer;
+.nav-link {
+  color: #909197;
 }
+
+/* .image {
+  cursor: pointer;
+} */
 
 .mid-medium {
   font-size: 22px;

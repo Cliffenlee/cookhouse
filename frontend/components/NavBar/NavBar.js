@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import NavBarLink from './NavBarLink'
 import Logo from './Logo'
 
@@ -10,9 +10,13 @@ export default function NavBar() {
     //FE9477 word orange
     return (
         <Flex height="7vh" minHeight="60px" justifyContent="center" alignItems="center" background="#FDF4EB" color="#FE9477">
-                <NavBarLink name="MY RECIPES" link="/recipe" />
+                <Box textAlign="end">
+                    <NavBarLink name="MY RECIPES" link="/recipe" />
+                </Box>
                 <Logo />
-                <NavBarLink name="PROFILE" link="/profile" />
+                <Box textAlign="start">
+                    <NavBarLink name="PROFILE" link="/profile" />
+                </Box>
         </Flex>
     )
 }

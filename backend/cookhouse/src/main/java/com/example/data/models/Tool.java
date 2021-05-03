@@ -13,10 +13,9 @@ import java.io.Serializable;
 //@IdClass(ToolPK.class)
 public @Data class Tool implements Serializable {
 
-
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    @EqualsAndHashCode
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
     @Data
     @Embeddable
     public class CompositeKey implements Serializable {

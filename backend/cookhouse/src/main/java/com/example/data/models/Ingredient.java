@@ -15,9 +15,9 @@ import java.io.Serializable;
 public @Data class Ingredient implements Serializable{
 
 
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    @EqualsAndHashCode
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
     @Data
     @Embeddable
     public class CompositeKey implements Serializable {

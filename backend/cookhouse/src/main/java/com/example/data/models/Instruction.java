@@ -14,9 +14,9 @@ import java.io.Serializable;
 public @Data class Instruction implements Serializable {
 
 
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    @EqualsAndHashCode
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
     @Data
     @Embeddable
     public class CompositeKey implements Serializable {

@@ -23,9 +23,5 @@ public @Data class Instruction implements Serializable {
     @EmbeddedId
     private CompositeKey compositeKey;
 
-//    @ManyToOne
-//    @JoinColumn(name = "recipe_id", referencedColumnName = "id", insertable = false, updatable = false)
-//    private Recipe recipe;
-
     private String instruction;
 }

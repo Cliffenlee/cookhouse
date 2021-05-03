@@ -13,7 +13,7 @@ public @Data class Nutrition {
 
     @MapsId
     @OneToOne
-    @JoinColumn(name="recipe_id", insertable = false, updatable = false)
+    @JoinColumn(name="recipe_id")
     private Recipe recipe;
 
     public Recipe getRecipe() {

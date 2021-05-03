@@ -3,6 +3,8 @@ package com.example.data.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -23,5 +25,7 @@ public @Data class Instruction implements Serializable {
     @EmbeddedId
     private CompositeKey compositeKey;
 
+    @NotNull
+    @Size(min=1, max=500, message = "Instruction length must be between 1 and 500!")
     private String instruction;
 }

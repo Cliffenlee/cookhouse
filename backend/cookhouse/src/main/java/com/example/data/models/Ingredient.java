@@ -3,6 +3,8 @@ package com.example.data.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -24,6 +26,11 @@ public @Data class Ingredient implements Serializable{
     @EmbeddedId
     private CompositeKey compositeKey;
 
+    @NotNull
+    @Size(min=1, max=200, message = "Ingredient name length must be between 1 and 200!")
     private String ingredient_name;
+
+    @NotNull
+    @Size(min=1, max=300, message = "Description length must be between 1 and 300!")
     private String description;
 }

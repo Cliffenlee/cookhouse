@@ -3,6 +3,8 @@ package com.example.data.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -13,7 +15,12 @@ public @Data class Recipe {
     @Column(name = "id")
     private Integer id;
 
+    @NotNull
+    @Size(min=1, message = "Recipe serving size must be more than 0!")
     private Integer serving;
+
+    @NotNull
+    @Size(max=40, message = "Recipe name must be between 1 to 40 characters!")
     private String name;
 
     @OneToOne (mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)

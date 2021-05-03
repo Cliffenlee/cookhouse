@@ -3,6 +3,8 @@ package com.example.data.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -15,6 +17,8 @@ public @Data class Tool implements Serializable {
         @Column(name = "recipe_id")
         private Integer recipe_id;
 
+        @NotNull
+        @Size(min=1, max=40, message = "Tool name length must be between 1 and 40!")
         private String tool_name;
     }
 

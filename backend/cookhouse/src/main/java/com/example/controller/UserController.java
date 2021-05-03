@@ -5,6 +5,8 @@ import com.example.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 public class UserController {
     @Autowired
@@ -18,8 +20,8 @@ public class UserController {
 
     // get single user
     @GetMapping("/user/{id}")
-    public User getUser(@PathVariable int id) {
-        return new User();
+    public Optional<User> getUser(@PathVariable Integer id) {
+        return userRepository.findById(id);
     }
 
     // create user

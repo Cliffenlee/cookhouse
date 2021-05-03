@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
   	id int auto_increment NOT NULL,
 	name VARCHAR(40) NOT NULL,
-	email VARCHAR(40) NOT NULL,
+	email VARCHAR(40	) NOT NULL,
   	PRIMARY KEY (id)
 );
 

@@ -3,15 +3,18 @@ package com.example.data.models;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
 public @Data class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     private String name;
     private String email;
-    private ArrayList<Recipe> recipes;
+
+//    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Recipe> recipes;
 }

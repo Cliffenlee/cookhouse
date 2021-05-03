@@ -8,13 +8,20 @@ import javax.persistence.*;
 @Table(name = "nutrition")
 public @Data class Nutrition {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private Float calories;
-    private Float protein;
-    private Float carbohydrates;
-    private Float fat;
-    private Float cholesterol;
-    private Float sodium;
+    @Column(name="recipe_id")
+    private Integer recipe_id;
+
+    @OneToOne
+    @JoinColumn(name="recipe_id", insertable = false, updatable = false)
+    private Recipe recipe;
+
+    private float calories;
+    private float protein;
+    private float carbohydrates;
+    private float fat;
+    private float cholesterol;
+    private float sodium;
+    private float sugar;
+    private float fibre;
 
 }

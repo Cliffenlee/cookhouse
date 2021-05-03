@@ -1,5 +1,6 @@
 package com.example.data.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,6 +23,11 @@ public @Data class Recipe {
     @NotNull
     @Size(max=40, message = "Recipe name must be between 1 to 40 characters!")
     private String name;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToOne (mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn

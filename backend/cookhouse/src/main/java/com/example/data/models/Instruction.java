@@ -1,5 +1,6 @@
 package com.example.data.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public @Data class Instruction implements Serializable {
     @Data
     @Embeddable
     public static class CompositeKey implements Serializable {
-        @Column(name="recipe_id")
+        @Column(name="recipe_id", insertable = false, updatable = false)
         private Integer recipe_id;
 
         @Column(name="step")
@@ -28,4 +29,9 @@ public @Data class Instruction implements Serializable {
     @NotNull
     @Size(min=1, max=500, message = "Instruction length must be between 1 and 500!")
     private String instruction;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", insertable = false, updatable = false)
+    private Recipe recipe;
 }

@@ -1,5 +1,6 @@
 package com.example.data.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public @Data class Tool implements Serializable {
     @Data
     @Embeddable
     public static class CompositeKey implements Serializable {
-        @Column(name = "recipe_id")
+        @Column(name = "recipe_id", insertable = false, updatable = false)
         private Integer recipe_id;
 
         @NotNull
@@ -24,4 +25,9 @@ public @Data class Tool implements Serializable {
 
     @EmbeddedId
     private CompositeKey compositeKey;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", insertable = false, updatable = false)
+    private Recipe recipe;
 }

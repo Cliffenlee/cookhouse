@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -17,7 +18,7 @@ public @Data class Recipe {
     private Integer id;
 
     @NotNull
-    @Size(min=1, message = "Recipe serving size must be more than 0!")
+    @Min(value=1, message = "Recipe serving size must be more than 0!")
     private Integer serving;
 
     @NotNull

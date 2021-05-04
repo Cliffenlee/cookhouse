@@ -24,9 +24,7 @@ public @Data class User {
     @Size(min=1, message = "User's email length must be more than 0!")
     @Column(unique = true)
     private String email;
-
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<Recipe> recipes;
 }

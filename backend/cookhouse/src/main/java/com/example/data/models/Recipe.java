@@ -34,14 +34,11 @@ public @Data class Recipe {
     private Nutrition nutrition;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "recipe")
-//    @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private List<Ingredient> ingredients;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "recipe")
-//    @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private List<Tool> tools;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "recipe")
-//    @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private List<Instruction> instructions;
 }

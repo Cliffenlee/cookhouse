@@ -1,14 +1,16 @@
 package com.example.controller;
 
+import com.example.data.models.*;
 import com.example.data.models.Error;
-import com.example.data.models.Recipe;
+import com.example.data.repositories.IngredientRepository;
+import com.example.data.repositories.NutritionRepository;
 import com.example.data.repositories.RecipeRepository;
+import com.example.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +18,12 @@ import java.util.Optional;
 public class RecipeController {
     @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private IngredientRepository ingredientRepository;
+    @Autowired
+    private NutritionRepository nutritionRepository;
 
     // get all recipes
     @GetMapping("/recipes")
@@ -47,12 +55,52 @@ public class RecipeController {
         }
     }
 
-    // create recipe
+//    // create recipe
+//    @PostMapping("/recipe")
+//    public ResponseEntity createRecipe(@Valid @RequestBody Recipe recipe) {
+//        try {
+//            return new ResponseEntity<Recipe>(recipeRepository.save(recipe), HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<Error>(new Error (500, e.toString()), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
     @PostMapping("/recipe")
-    public ResponseEntity createRecipe(@Valid @RequestBody Recipe recipe) {
+    public ResponseEntity createRecipe (@RequestBody Recipe recipe) {
         try {
-            return new ResponseEntity<Recipe>(recipeRepository.save(recipe), HttpStatus.OK);
+            Optional<User> user = userRepository.findById(recipe.getUser_id());
+            System.out.println(recipe);
+            List<Recipe> recipeList = user.get().getRecipes();
+            recipeList.add(recipe);
+            user.get().setRecipes(recipeList);
+            System.out.println(recipe.getUser_id());
+            System.out.println(user);
+//            System.out.println(recipe.getUser_id());
+//            System.out.println(recipe);
+//            for (Ingredient ingredient: recipe.getIngredients()) {
+//                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
+//                ingredient.setCompositeKey(ck);
+//            }
+//
+//            for (Ingredient ingredient: recipe.getIngredients()) {
+//                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
+//                ingredient.setCompositeKey(ck);
+//            }
+//
+//            for (Ingredient ingredient: recipe.getIngredients()) {
+//                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
+//                ingredient.setCompositeKey(ck);
+//            }
+//
+//            for (Ingredient ingredient: recipe.getIngredients()) {
+//                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
+//                ingredient.setCompositeKey(ck);
+//            }
+//            System.out.println(recipe);
+
+            return new ResponseEntity(recipeRepository.save(recipe), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<Error>(new Error (500, e.toString()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

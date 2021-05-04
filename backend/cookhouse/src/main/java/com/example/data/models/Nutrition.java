@@ -3,6 +3,7 @@ package com.example.data.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashMap;
 
 @Entity
 @Table(name = "nutrition")
@@ -12,21 +13,41 @@ public @Data class Nutrition {
     private Integer recipe_id;
 
     @MapsId
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="recipe_id")
     private Recipe recipe;
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+        this.recipe_id = recipe.getId();
+    }
 
     public Recipe getRecipe() {
         return null;
     }
 
-    private float calories;
-    private float protein;
-    private float carbohydrates;
-    private float fat;
-    private float cholesterol;
-    private float sodium;
-    private float sugar;
-    private float fibre;
+    @Override
+    public String toString() {
+        return "Nutrition{" +
+                "recipe_id=" + recipe_id +
+                ", calories=" + calories +
+                ", protein=" + protein +
+                ", carbohydrates=" + carbohydrates +
+                ", fat=" + fat +
+                ", cholesterol=" + cholesterol +
+                ", sodium=" + sodium +
+                ", sugar=" + sugar +
+                ", fibre=" + fibre +
+                '}';
+    }
+
+    private Float calories;
+    private Float protein;
+    private Float carbohydrates;
+    private Float fat;
+    private Float cholesterol;
+    private Float sodium;
+    private Float sugar;
+    private Float fibre;
 
 }

@@ -1,9 +1,12 @@
 package com.example.data.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -19,7 +22,6 @@ public @Data class Instruction implements Serializable {
         private Integer recipe_id;
 
         @Column(name="step")
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Integer step;
     }
 
@@ -31,7 +33,15 @@ public @Data class Instruction implements Serializable {
     private String instruction;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id", insertable = false, updatable = false)
     private Recipe recipe;
+
+    @Override
+    public String toString() {
+        return "Instruction{" +
+                "compositeKey=" + compositeKey +
+                ", instruction='" + instruction + '\'' +
+                '}';
+    }
 }

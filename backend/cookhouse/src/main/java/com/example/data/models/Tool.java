@@ -27,7 +27,14 @@ public @Data class Tool implements Serializable {
     private CompositeKey compositeKey;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id", insertable = false, updatable = false)
     private Recipe recipe;
+
+    @Override
+    public String toString() {
+        return "Tool{" +
+                "compositeKey=" + compositeKey +
+                '}';
+    }
 }

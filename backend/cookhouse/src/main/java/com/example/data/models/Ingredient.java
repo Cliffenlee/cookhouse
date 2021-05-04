@@ -28,7 +28,7 @@ public @Data class Ingredient implements Serializable{
     private CompositeKey compositeKey;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id", insertable = false, updatable = false)
     private Recipe recipe;
 
@@ -39,4 +39,13 @@ public @Data class Ingredient implements Serializable{
     @NotNull
     @Size(min=1, max=300, message = "Description length must be between 1 and 300!")
     private String description;
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "compositeKey=" + compositeKey +
+                ", ingredient_name='" + ingredient_name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

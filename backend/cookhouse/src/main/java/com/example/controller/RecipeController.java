@@ -6,11 +6,14 @@ import com.example.data.repositories.IngredientRepository;
 import com.example.data.repositories.NutritionRepository;
 import com.example.data.repositories.RecipeRepository;
 import com.example.data.repositories.UserRepository;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,38 +69,36 @@ public class RecipeController {
 //    }
 
     @PostMapping("/recipe")
-    public ResponseEntity createRecipe (@RequestBody Recipe recipe) {
+    public ResponseEntity createRecipe (@RequestBody HashMap body) {
         try {
-            Optional<User> user = userRepository.findById(recipe.getUser_id());
+            Recipe recipe = new Recipe();
+//            recipe.setUser_id((Integer)body.get("user_id"));
+            recipe.setServing((Integer)body.get("serving"));
+            recipe.setName((String)body.get("name"));
+            Optional<User> user = userRepository.findById((Integer) body.get("user_id"));
+            System.out.println("------------------- before saving to repo -------------------");
+            System.out.println(recipe);
+            System.out.println(user.get());
+            recipe.setUser(user.get());
+            recipeRepository.save(recipe);
+            System.out.println("------------------- after saving to repo -------------------");
             System.out.println(recipe);
             List<Recipe> recipeList = user.get().getRecipes();
             recipeList.add(recipe);
             user.get().setRecipes(recipeList);
             System.out.println(recipe.getUser_id());
-            System.out.println(user);
-//            System.out.println(recipe.getUser_id());
-//            System.out.println(recipe);
-//            for (Ingredient ingredient: recipe.getIngredients()) {
-//                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
-//                ingredient.setCompositeKey(ck);
-//            }
-//
-//            for (Ingredient ingredient: recipe.getIngredients()) {
-//                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
-//                ingredient.setCompositeKey(ck);
-//            }
-//
-//            for (Ingredient ingredient: recipe.getIngredients()) {
-//                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
-//                ingredient.setCompositeKey(ck);
-//            }
-//
-//            for (Ingredient ingredient: recipe.getIngredients()) {
-//                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
-//                ingredient.setCompositeKey(ck);
-//            }
-//            System.out.println(recipe);
-
+            System.out.println("------------------- before saving nutrition -------------------");
+            System.out.println(recipe);
+            System.out.println("------------------- after saving nutrition -------------------");
+            Gson gson = new Gson();
+            JsonElement jsonElement = gson.toJsonTree(body.get("nutrition"));
+            Nutrition nutrition = gson.fromJson(jsonElement, Nutrition.class);
+            System.out.println(nutrition);
+            nutrition.setRecipe(recipe);
+            recipe.setNutrition(nutrition);
+            System.out.println(nutrition);
+            System.out.println(recipe);
+            nutritionRepository.save(nutrition);
             return new ResponseEntity(recipeRepository.save(recipe), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

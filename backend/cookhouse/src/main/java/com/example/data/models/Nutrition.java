@@ -13,7 +13,7 @@ public @Data class Nutrition {
     private Integer recipe_id;
 
     @MapsId
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="recipe_id")
     private Recipe recipe;
 

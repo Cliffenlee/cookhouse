@@ -106,15 +106,12 @@ public class RecipeController {
             for (Object object: ingredientList) {
                 JsonElement ingredientElement = gson.toJsonTree(object);
                 Ingredient ingredient = gson.fromJson(ingredientElement, Ingredient.class);
+                ingredient.setRecipe_id(recipe.getId());
                 ingredient.setRecipe(recipe);
                 currentIngredientList.add(ingredient);
-                recipe.setIngredients(currentIngredientList);
-                Ingredient.CompositeKey ck = new Ingredient.CompositeKey();
-                ck.setRecipe_id(recipe.getId());
-                ingredient.setCompositeKey(ck);
-                System.out.println(recipe);
                 ingredientRepository.save(ingredient);
             }
+            recipe.setIngredients(currentIngredientList);
 
             // add instructions to recipe
             List<Instruction> instructionList = (List<Instruction>) body.get("instructions");

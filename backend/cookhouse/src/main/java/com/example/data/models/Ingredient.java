@@ -12,20 +12,13 @@ import java.io.Serializable;
 @Entity
 @Table(name = "ingredient")
 public @Data class Ingredient implements Serializable{
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @Data
-    @Embeddable
-    public static class CompositeKey implements Serializable {
-        @Column(name="recipe_id", insertable = false, updatable = false)
-        private Integer recipe_id;
-
-        @Column(name = "id")
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer id;
-    }
-
-    @EmbeddedId
-    private CompositeKey compositeKey;
+    @Column(name = "recipe_id")
+    private Integer recipe_id;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
@@ -43,7 +36,8 @@ public @Data class Ingredient implements Serializable{
     @Override
     public String toString() {
         return "Ingredient{" +
-                "compositeKey=" + compositeKey +
+                "id=" + id +
+                ", recipe_id=" + recipe_id +
                 ", ingredient_name='" + ingredient_name + '\'' +
                 ", description='" + description + '\'' +
                 '}';

@@ -1,103 +1,109 @@
-import { Box, Flex } from '@chakra-ui/layout'
-import React, { useState } from 'react'
-import Recipe from '../components/Recipe/recipe'
+import React, { Component }  from 'react'
+import axios from 'axios';
+import { Spinner } from '@chakra-ui/spinner';
+import { Box } from '@chakra-ui/layout';
 
-export default function recipe() {
-    const [recipes, setRecipes] = useState([
-        {
-            "id": 1,
-            "author": "Timothy",
-            "name": "egg tarts from the heart",
-            "ingredients": [
-                {
-                    "name": "egg",
-                    "quantity": 2,
-                    "measurement": "pieces"
-                },
-                {
-                    "name": "flour",
-                    "quantity": 3,
-                    "measurement": "cups"
-                },
-            ],
-            "tools": [
-                {
-                "name": "oven"
-                }
-            ],
-            "instructions": [
-                "make the egg tart",
-                "put it in the oven"
-            ],
-            "nutrition": {
-                "calories": "350",
-                "protein": "20g",
-                "carbohydrates": "310g",
-                "fat": "50g",
-                "cholesterol": "200mg",
-                "sodium": "100mg"
-            }
-        },
-        {
-            "id": 2,
-            "author": "Sarah",
-            "name": "Steak that will sway vegans",
-            "ingredients": [
-                {
-                "name": "beef",
-                "quantity": 350,
-                "measurement": "g"
-                },
-                {
-                    "name": "salt",
-                    "quantity": 5,
-                    "measurement": "teaspoons"
-                },
-                {
-                    "name": "pepper",
-                    "quantity": 3,
-                    "measurement": "teaspoons"
-                },
-                {
-                    "name": "paprika",
-                    "quantity": 2,
-                    "measurement": "tablespoons"
-                },
-            ],
-            "tools": [
-                {
-                "name": "microwave"
-                },
-                {
-                    "name": "frying pan"
-                }
-            ],
-            "instructions": [
-                "make the egg tart",
-                "put it in the oven"
-            ],
-            "nutrition": {
-                "calories": "800",
-                "protein": "50g",
-                "carbohydrates": "530g",
-                "fat": "30g",
-                "cholesterol": "250mg",
-                "sodium": "220mg"
-            }
+class Recipe extends Component {
+    state = {
+        data: null,
+        loading: true,
+        error: false
+    }
+
+    async getAllRecipes() {
+        this.setState({loading: true})
+        try {
+            const data = await axios.get('http://localhost:8080/recipes')
+            console.log(data.data)
+            this.setState({data: data.data})
+        } catch (error) {
+            this.setState({error: true})
+        } finally {
+            this.setState({loading: false})
         }
-    ])
+    }
 
-    return (
-        <Flex alignItems="center" paddingY="10" height="93vh" flexDirection="column">
-            <Box textAlign="start" marginBottom="10">
-                <a className="big-medium">Your Recipes</a>
+    componentDidMount() {
+        this.getAllRecipes()
+    }
+
+    render () {
+        const {data, loading, error} = this.state
+
+        if (loading) {
+            return (
+            <Box className="body" display="flex" justifyContent="center" alignItems="center">
+                <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+                />
             </Box>
-            <Flex>
-                {recipes.map(recipe => {
-                    return <Recipe key={recipe.id} recipe={recipe} />
-                })}
-            </Flex>
+            )
+        } else {
 
-        </Flex>
-    )
+        }
+
+        if (error) {
+            return <Box class="error">
+                Something went wrong...
+            </Box>
+        }
+
+        return (
+        <div className="body">
+            {data.map(recipe => {
+                {console.log("hello")}
+                <Box key={recipe.id}>
+                    {recipe.name}
+                </Box>
+            })}
+            <div className="book">
+                <input type="checkbox" id="c1"/>
+                <input type="checkbox" id="c2"/>
+                <input type="checkbox" id="c3"/>
+                <div id="cover">My cover page.</div>
+                <div className="flip-book">
+                    <div className="flip" id ="p1">
+                        <div className="back">
+                            my second page.
+                            <label className="back-btn" htmlFor="c1">Back</label>
+                        </div>
+                        <div className="front">
+                            <h2>Apple</h2>
+                            <p>some paragraph about apple.</p>
+                            <label className="next-btn" htmlFor="c1">Next</label>
+                        </div>
+                    </div>
+                    <div className="flip" id ="p2">
+                        <div className="back">
+                            my second page.
+                            <label className="back-btn" htmlFor="c2">Back</label>
+                        </div>
+                        <div className="front">
+                            <h2>Pineapple</h2>
+                            <p>some paragraph about apple.</p>
+                            <label className="next-btn" htmlFor="c2">Next</label>
+                        </div>
+                    </div>
+                    <div className="flip" id ="p3">
+                        <div className="back">
+                            my second page.
+                            <label className="back-btn" htmlFor="c3">Back</label>
+                        </div>
+                        <div className="front">
+                            <h2>Strawberry</h2>
+                            <p>some paragraph about apple.</p>
+                            <label className="next-btn" htmlFor="c3">Next</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        )
+    }
 }
+
+export default Recipe;

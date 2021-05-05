@@ -29,11 +29,30 @@ a {
 
 .logo {
   font-family: "Artbrush";
-  font-size: 40px;
+  font-size: 3vh;
+
+}
+
+.logo-box{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-bar {
+  height: 4.5vh;
+  padding: 0 20vw;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  background: #FDF4EB;
+  color: #FE9477;
+  text-align: center;
 }
 
 .nav-link {
   color: #909197;
+  font-size: 13px;
 }
 
 /* .image {
@@ -46,4 +65,126 @@ a {
 
 .big-medium {
   font-size: 36px
+}
+
+.body {
+  margin: 0;
+  padding: 0;
+  height: 93vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+  background: linear-gradient(90deg, #fff 50%, #4a1010 50%)
+}
+
+
+input {
+  display: none;
+}
+
+.book {
+  display: flex;
+}
+
+#cover {
+  width: 38vw;
+  height: 75vh;
+  background-color: #F5F5F5;
+  box-shadow: 20px 20px 50px 15px grey;
+  background-image: linear-gradient(90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
+}
+
+.flip-book {
+  width: 38vw;
+  height: 75vh;
+  position: relative;
+  perspective: 4500px;
+}
+
+.flip {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: left;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: all 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+  color: #000;
+}
+
+p{
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  box-sizing: border-box;
+  padding: 0 13px;
+  box-shadow: inset 20px 0 50px rgba(0,0,0,0.5) 0 2px rgba(0,0,0,0.5);
+  /* box-shadow: 20px 20px 50px 15px grey; */
+}
+
+.back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 00;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  background-color: #000;
+  color: #fff;
+}
+
+.back-btn{
+  position: absolute;
+  bottom: 13px;
+  right: 13px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.next-btn{
+  position: absolute;
+  bottom: 13px;
+  right: 13px;
+  cursor: pointer;
+  color: #000;
+}
+
+#p1 {
+  z-index: 3;
+}
+
+#p2 {
+  z-index: 2;
+}
+
+#p1 {
+  z-index: 1;
+}
+
+#c1:checked ~.flip-book #p1 {
+  transform: rotateY(-180deg);
+  z-index: 1;
+}
+
+#c2:checked ~.flip-book #p2 {
+  transform: rotateY(-180deg);
+  z-index: 2;
+}
+
+#c3:checked ~.flip-book #p3 {
+  transform: rotateY(-180deg);
+  z-index: 3;
 }

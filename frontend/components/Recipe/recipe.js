@@ -14,13 +14,13 @@ export default function recipe({recipe}) {
             <Box>
                 <a>ingredients: </a>
                     {ingredients.map(ingredient=> {
-                        return <Tag marginRight="1">{ingredient.name}</Tag>
+                        return <Tag key={ingredient.name} marginRight="1">{ingredient.name}</Tag>
                     })}
             </Box>
             <Box>
                 <a>tools: </a>
                 {tools.map(tool => {
-                    return <Tag marginRight="1">{tool.name}</Tag>
+                    return <Tag key={tool.name} marginRight="1">{tool.name}</Tag>
                 })}
             </Box>
 

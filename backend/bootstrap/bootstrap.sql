@@ -39,10 +39,11 @@ INSERT INTO recipe (user_id, name, serving) VALUES
 
 DROP TABLE IF EXISTS instruction;
 CREATE TABLE IF NOT EXISTS instruction (
+	id int auto_increment NOT NULL,
   	step int NOT NULL,
   	recipe_id int NOT NULL,
 	instruction VARCHAR(500) NOT NULL,
-  	PRIMARY KEY (step, recipe_id),
+  	PRIMARY KEY (id),
   	FOREIGN KEY (recipe_id) REFERENCES recipe(id)
 );
 
@@ -94,7 +95,7 @@ CREATE TABLE IF NOT EXISTS ingredient (
   	recipe_id int NOT NULL,
 	ingredient_name VARCHAR(200),
 	description VARCHAR(300) NOT NULL,
-  	PRIMARY KEY (id, recipe_id),
+  	PRIMARY KEY (id),
   	FOREIGN KEY (recipe_id) REFERENCES recipe(id)
 );
 
@@ -135,9 +136,10 @@ INSERT INTO ingredient (ingredient_name, recipe_id, description) VALUES
 
 DROP TABLE IF EXISTS tool;
 CREATE TABLE IF NOT EXISTS tool (
-	tool_name VARCHAR(50),
+	id int auto_increment NOT NULL,
+	tool_name VARCHAR(50) NOT NULL,
   	recipe_id int NOT NULL,
-  	PRIMARY KEY (tool_name, recipe_id),
+  	PRIMARY KEY (id),
   	FOREIGN KEY (recipe_id) REFERENCES recipe(id)
 );
 

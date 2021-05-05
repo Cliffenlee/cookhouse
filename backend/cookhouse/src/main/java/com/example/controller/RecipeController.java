@@ -33,6 +33,7 @@ public class RecipeController {
     private Gson gson = new Gson();
 
     // get all recipes
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/recipes")
     public ResponseEntity getAllRecipes() {
         try {

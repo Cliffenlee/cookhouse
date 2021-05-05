@@ -12,29 +12,27 @@ import java.io.Serializable;
 @Table(name = "tool")
 public @Data class Tool implements Serializable {
 
-    @Data
-    @Embeddable
-    public static class CompositeKey implements Serializable {
-        @Column(name = "recipe_id", insertable = false, updatable = false)
-        private Integer recipe_id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer tool_id;
 
-        @NotNull
-        @Size(min=1, max=40, message = "Tool name length must be between 1 and 40!")
-        private String tool_name;
-    }
+    private String tool_name;
 
-    @EmbeddedId
-    private CompositeKey compositeKey;
+    @Column(name="recipe_id")
+    private Integer recipe_id;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "recipe_id", insertable = false, updatable = false)
     private Recipe recipe;
 
     @Override
     public String toString() {
         return "Tool{" +
-                "compositeKey=" + compositeKey +
+                "tool_id=" + tool_id +
+                ", tool_name='" + tool_name + '\'' +
+                ", recipe_id=" + recipe_id +
                 '}';
     }
 }

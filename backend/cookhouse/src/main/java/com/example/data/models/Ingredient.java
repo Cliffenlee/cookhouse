@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "ingredient")
-public @Data class Ingredient implements Serializable{
+public @Data class Ingredient {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public @Data class Ingredient implements Serializable{
     private Integer recipe_id;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "recipe_id", insertable = false, updatable = false)
     private Recipe recipe;
 

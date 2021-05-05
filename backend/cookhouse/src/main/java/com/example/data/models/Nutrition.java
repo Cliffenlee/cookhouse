@@ -1,9 +1,9 @@
 package com.example.data.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashMap;
 
 @Entity
 @Table(name = "nutrition")
@@ -12,6 +12,7 @@ public @Data class Nutrition {
     @Column(name = "recipe_id")
     private Integer recipe_id;
 
+    @JsonIgnore
     @MapsId
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="recipe_id")

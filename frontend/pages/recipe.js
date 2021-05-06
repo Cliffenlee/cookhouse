@@ -4,7 +4,12 @@ import Loader from '../components/common/Loader'
 import Error from "../components/common/Error"
 import { Box, Center, Flex, Stack } from '@chakra-ui/layout'
 import { Text, Heading, Tag } from "@chakra-ui/react"
+import { Input } from "@chakra-ui/input"
 import {ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
+import Description from '../components/Recipe/Description';
+import Back from '../components/Recipe/Back';
+import Front from '../components/Recipe/Front';
+import SearchPage from '../components/Recipe/SearchPage';
 
 class Recipe extends Component {
     constructor(props) {
@@ -19,10 +24,19 @@ class Recipe extends Component {
     async getAllRecipes() {
         this.setState({loading: true})
         try {
-            const data = await axios.get('http://localhost:8080/recipes')
-            this.setState({recipes: data.data.slice(0,3)})
+            let data = await axios.get('http://localhost:8080/recipes')
+            // data=[]
+            console.log(data)
+            this.setState({recipes: data == undefined || data.length == 0 ? null : data.data.slice(0,3)})
+            if (data !== undefined && data.length !== 0) {
+                const first = data.data[0]
+                this.setState({
+                    firstDescription: <Description name={first.name} tools={first.tools} ingredients={first.ingredients} nutrition={first.nutrition} />
+                })
+            }
             console.log(this.state.recipes)
         } catch (error) {
+            console.log(error)
             this.setState({error: true})
         } finally {
             this.setState({loading: false})
@@ -48,12 +62,54 @@ class Recipe extends Component {
             )
         }
 
+        if(recipes == null || recipes.length == 0) {
+            console.log("im in")
+            return (
+                <Box className="body">
+                    <Box className="book">
+                    <input type="checkbox" id="c0"/>
+                        <Box id="cover">
+                            <Heading mx={8} my={8} textAlign="start">
+                                No recipes available.
+                            </Heading>
+                        </Box>
+                        <Box className="flip-book">
+                            <Box className="flip" zIndex={99} id ="p0">
+                                <Box className="back">
+                                    <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
+                                        <Text className="back-logo">
+                                            cookhouse
+                                        </Text>
+                                    </Flex>
+                                    <label className="back-btn" htmlFor="c0">
+                                        <Tag padding={5}>
+                                            <ArrowBackIcon/>
+                                        </Tag>
+                                    </label>
+                                </Box>
+                                <Box className="front">
+                                    <Flex flexDirection="column" justifyContent="center" alignItems="center" padding={8}>
+                                        <Input focusBorderColor="pink.400" placeholder="Search for a recipe"></Input>
+                                    </Flex>
+                                    <label className="next-btn" htmlFor="c0">
+                                        <Tag padding={5}>
+                                            <ArrowForwardIcon/>
+                                        </Tag>
+                                    </label>
+                                </Box>
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+            )
+        }
+
         return (
         <Box className="body">
             <Box className="book">
+            <input type="checkbox" id="c0"/>
             {recipes.map((recipe, index)=> {
-                console.log("c" + (index+1));
-                return <input type="checkbox" id={"c"+(index+1)}/>
+                return <input key={index+1} type="checkbox" id={"c"+(index+1)}/>
             })}
                 <Box id="cover">
                     <Heading mx={8} my={8} textAlign="start">
@@ -62,7 +118,7 @@ class Recipe extends Component {
                     <Box mx={5}>
                         {recipes.map((recipe, index)=> {
                             return (
-                                <Text p={3} lineHeight="1.5" fontSize="md">
+                                <Text key={index} p={3} lineHeight="1.5" fontSize="md">
                                     {index+1}. {recipe.name}
                                 </Text>
                             )
@@ -70,32 +126,18 @@ class Recipe extends Component {
                     </Box>
                 </Box>
                 <Box className="flip-book">
+                    <Box className="flip" zIndex={recipes.length + 1} id ="p0">
+                        <Back selector="c0"/>
+                        {/* <Flex position="relative" flexDirection="column" className="front" padding={5} overflowY="scroll" overflowX="hidden"> */}
+                            <SearchPage selector="c0"/>
+                        {/* </Flex> */}
+                    </Box>
                     {recipes.map((recipe, index)=> {
                         return (
-                            <Box className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
-                                <Box className="back">
-                                    PAGE {index+1}
-                                    <label className="back-btn" htmlFor={"c"+(index+1)}>
-                                        <Tag padding={5}>
-                                            <ArrowBackIcon/>
-                                        </Tag>
-                                    </label>
-                                </Box>
+                            <Box key={index} className="flip" zIndex={recipes.length - parseInt(index) - 1} id={"p"+(index+1)}>
+                                <Back selector={"c"+(index+1)} />
                                 <Flex position="relative" flexDirection="column" className="front" padding={5} overflowY="scroll" overflowX="hidden">
-                                    <Heading textTransform="uppercase" mt={3} mb={8}>{recipe.name}</Heading>
-                                        {recipe.instructions.map((instruction, instructionIndex) => {
-                                            return (
-                                            <Box position="relative" borderWidth="2px" borderColor="gray.300" padding={5} borderRadius="lg" my="4">
-                                                <Tag colorScheme="messenger" position="absolute" left="0" top="0" transform="translateX(-50%) translateY(-50%)" borderRadius="full">{instructionIndex+1}</Tag>
-                                                <Text lineHeight="1.2" fontSize="md">{instruction.instruction}</Text>
-                                            </Box>
-                                            )
-                                        })}
-                                        <label className="next-btn" htmlFor={"c"+(index+1)}>
-                                            <Tag padding={5}>
-                                                <ArrowForwardIcon/>
-                                            </Tag>
-                                        </label>
+                                <Front key={index} instructions={recipe.instructions} selector={"c"+(index+1)} recipeName={recipe.name} />
                                 </Flex>
                             </Box>
                         )

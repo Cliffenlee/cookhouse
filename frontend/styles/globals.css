@@ -33,6 +33,12 @@ a {
 
 }
 
+.back-logo {
+  font-family: "Artbrush";
+  font-size: 7vh;
+
+}
+
 .logo-box{
   position: absolute;
   left: 50%;
@@ -83,7 +89,7 @@ a {
 }
 
 
-input {
+input[type="checkbox"] {
   display: none;
 }
 
@@ -158,7 +164,7 @@ p{
   top: 50%;
   left: 0;
   cursor: pointer;
-  transform: translateX(-100%) translateY(-50%);
+  transform: translateX(-95%) translateY(-50%);
   backface-visibility: hidden;
   color: #000;
 }
@@ -167,9 +173,15 @@ p{
   position: fixed;
   top: 50%;
   right: 0;
-  transform: translateX(100%) translateY(-50%);
+  transform: translateX(95%) translateY(-50%);
   backface-visibility: hidden;
   cursor: pointer;
+}
+
+
+#c0:checked ~.flip-book #p0 {
+  transform: rotateY(-180deg);
+  z-index: 0;
 }
 
 #c1:checked ~.flip-book #p1 {

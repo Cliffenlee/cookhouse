@@ -63,7 +63,7 @@ class Recipe extends Component {
         }
 
         if(recipes == null || recipes.length == 0) {
-            console.log("im in")
+            console.log("recipes is null or length is 0.")
             return (
                 <Box className="body">
                     <Box className="book">
@@ -129,7 +129,7 @@ class Recipe extends Component {
                     <Box className="flip" zIndex={recipes.length + 1} id ="p0">
                         <Back selector="c0"/>
                         {/* <Flex position="relative" flexDirection="column" className="front" padding={5} overflowY="scroll" overflowX="hidden"> */}
-                            <SearchPage selector="c0"/>
+                            <SearchPage recipes={recipes} selector="c0"/>
                         {/* </Flex> */}
                     </Box>
                     {recipes.map((recipe, index)=> {

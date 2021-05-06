@@ -126,15 +126,13 @@ class Recipe extends Component {
                     </Box>
                 </Box>
                 <Box className="flip-book">
-                    <Box className="flip" zIndex={recipes.length + 1} id ="p0">
+                    <Box className="flip" zIndex={99} id ="p0">
                         <Back selector="c0"/>
-                        {/* <Flex position="relative" flexDirection="column" className="front" padding={5} overflowY="scroll" overflowX="hidden"> */}
-                            <SearchPage recipes={recipes} selector="c0"/>
-                        {/* </Flex> */}
+                        <SearchPage recipes={recipes} selector="c0"/>
                     </Box>
                     {recipes.map((recipe, index)=> {
                         return (
-                            <Box key={index} className="flip" zIndex={recipes.length - parseInt(index) - 1} id={"p"+(index+1)}>
+                            <Box key={index} className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
                                 <Back selector={"c"+(index+1)} />
                                 <Flex position="relative" flexDirection="column" className="front" padding={5} overflowY="scroll" overflowX="hidden">
                                 <Front key={index} instructions={recipe.instructions} selector={"c"+(index+1)} recipeName={recipe.name} />

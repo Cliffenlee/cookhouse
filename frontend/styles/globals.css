@@ -76,6 +76,10 @@ a {
   align-items: center;
   font-family: "Roboto", sans-serif;
   background: linear-gradient(90deg, #fff 50%, #4a1010 50%)
+
+} ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 
@@ -92,7 +96,8 @@ input {
   height: 75vh;
   background-color: #F5F5F5;
   box-shadow: 20px 20px 50px 15px grey;
-  background-image: linear-gradient(90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
+  background-image: linear-gradient(-90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
+
 }
 
 .flip-book {
@@ -111,7 +116,7 @@ input {
   transform-origin: left;
   transform-style: preserve-3d;
   transform: rotateY(0deg);
-  transition: all 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all 0.9s cubic-bezier(0.3, 0.025, 0.155, 1);
   color: #000;
 }
 
@@ -126,10 +131,11 @@ p{
   height: 100%;
   top: 0;
   left: 0;
-  background-color: #fff;
+  background-color: #F5F5F5;
   box-sizing: border-box;
   padding: 0 13px;
-  box-shadow: inset 20px 0 50px rgba(0,0,0,0.5) 0 2px rgba(0,0,0,0.5);
+  background-image: linear-gradient(90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
+  /* box-shadow: inset 20px 0 50px rgba(0,0,0,0.5) 0 2px rgba(0,0,0,0.5); */
   /* box-shadow: 20px 20px 50px 15px grey; */
 }
 
@@ -142,36 +148,28 @@ p{
   z-index: 00;
   transform: rotateY(180deg);
   backface-visibility: hidden;
-  background-color: #000;
-  color: #fff;
-}
-
-.back-btn{
-  position: absolute;
-  bottom: 13px;
-  right: 13px;
-  cursor: pointer;
-  color: #fff;
-}
-
-.next-btn{
-  position: absolute;
-  bottom: 13px;
-  right: 13px;
-  cursor: pointer;
+  background-color: #F5F5F5;
+  background-image: linear-gradient(-90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
   color: #000;
 }
 
-#p1 {
-  z-index: 3;
+.back-btn{
+  position: fixed;
+  top: 50%;
+  left: 0;
+  cursor: pointer;
+  transform: translateX(-100%) translateY(-50%);
+  backface-visibility: hidden;
+  color: #000;
 }
 
-#p2 {
-  z-index: 2;
-}
-
-#p1 {
-  z-index: 1;
+.next-btn{
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateX(100%) translateY(-50%);
+  backface-visibility: hidden;
+  cursor: pointer;
 }
 
 #c1:checked ~.flip-book #p1 {

@@ -1,21 +1,27 @@
 import React, { Component }  from 'react'
 import axios from 'axios';
-import { Spinner } from '@chakra-ui/spinner';
-import { Box } from '@chakra-ui/layout';
+import Loader from '../components/common/Loader'
+import Error from "../components/common/Error"
+import { Box, Center, Flex, Stack } from '@chakra-ui/layout'
+import { Text, Heading, Tag } from "@chakra-ui/react"
+import {ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
 
 class Recipe extends Component {
-    state = {
-        data: null,
-        loading: true,
-        error: false
+    constructor(props) {
+        super(props)
+        this.state = {
+            recipes: null,
+            loading: true,
+            error: false
+        }
     }
 
     async getAllRecipes() {
         this.setState({loading: true})
         try {
             const data = await axios.get('http://localhost:8080/recipes')
-            console.log(data.data)
-            this.setState({data: data.data})
+            this.setState({recipes: data.data.slice(0,3)})
+            console.log(this.state.recipes)
         } catch (error) {
             this.setState({error: true})
         } finally {
@@ -28,80 +34,108 @@ class Recipe extends Component {
     }
 
     render () {
-        const {data, loading, error} = this.state
+        const {recipes, loading, error} = this.state
 
         if (loading) {
             return (
-            <Box className="body" display="flex" justifyContent="center" alignItems="center">
-                <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="blue.500"
-                size="xl"
-                />
-            </Box>
+                <Loader/>
             )
-        } else {
-
         }
 
         if (error) {
-            return <Box class="error">
-                Something went wrong...
-            </Box>
+            return (
+                <Error />
+            )
         }
 
         return (
-        <div className="body">
-            {data.map(recipe => {
-                {console.log("hello")}
-                <Box key={recipe.id}>
-                    {recipe.name}
-                </Box>
+        <Box className="body">
+            <Box className="book">
+            {recipes.map((recipe, index)=> {
+                console.log("c" + (index+1));
+                return <input type="checkbox" id={"c"+(index+1)}/>
             })}
-            <div className="book">
-                <input type="checkbox" id="c1"/>
-                <input type="checkbox" id="c2"/>
-                <input type="checkbox" id="c3"/>
-                <div id="cover">My cover page.</div>
-                <div className="flip-book">
-                    <div className="flip" id ="p1">
-                        <div className="back">
+                <Box id="cover">
+                    <Heading mx={8} my={8} textAlign="start">
+                        MY RECIPES
+                    </Heading>
+                    <Box mx={5}>
+                        {recipes.map((recipe, index)=> {
+                            return (
+                                <Text p={3} lineHeight="1.5" fontSize="md">
+                                    {index+1}. {recipe.name}
+                                </Text>
+                            )
+                        })}
+                    </Box>
+                </Box>
+                <Box className="flip-book">
+                    {recipes.map((recipe, index)=> {
+                        return (
+                            <Box className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
+                                <Box className="back">
+                                    PAGE {index+1}
+                                    <label className="back-btn" htmlFor={"c"+(index+1)}>
+                                        <Tag padding={5}>
+                                            <ArrowBackIcon/>
+                                        </Tag>
+                                    </label>
+                                </Box>
+                                <Flex position="relative" flexDirection="column" className="front" padding={5} overflowY="scroll" overflowX="hidden">
+                                    <Heading textTransform="uppercase" mt={3} mb={8}>{recipe.name}</Heading>
+                                        {recipe.instructions.map((instruction, instructionIndex) => {
+                                            return (
+                                            <Box position="relative" borderWidth="2px" borderColor="gray.300" padding={5} borderRadius="lg" my="4">
+                                                <Tag colorScheme="messenger" position="absolute" left="0" top="0" transform="translateX(-50%) translateY(-50%)" borderRadius="full">{instructionIndex+1}</Tag>
+                                                <Text lineHeight="1.2" fontSize="md">{instruction.instruction}</Text>
+                                            </Box>
+                                            )
+                                        })}
+                                        <label className="next-btn" htmlFor={"c"+(index+1)}>
+                                            <Tag padding={5}>
+                                                <ArrowForwardIcon/>
+                                            </Tag>
+                                        </label>
+                                </Flex>
+                            </Box>
+                        )
+                    })}
+                    {/* <Box className="flip" id ="p1">
+                        <Box className="back">
                             my second page.
-                            <label className="back-btn" htmlFor="c1">Back</label>
-                        </div>
-                        <div className="front">
+                            <label className="back-btn" htmlFor={"c"+"1"}>Back</label>
+                        </Box>
+                        <Box className="front">
                             <h2>Apple</h2>
                             <p>some paragraph about apple.</p>
-                            <label className="next-btn" htmlFor="c1">Next</label>
-                        </div>
-                    </div>
-                    <div className="flip" id ="p2">
-                        <div className="back">
+                            <label className="next-btn" htmlFor={"c"+"1"}>Next</label>
+                        </Box>
+                    </Box>
+                    <Box className="flip" id ="p2">
+                        <Box className="back">
                             my second page.
                             <label className="back-btn" htmlFor="c2">Back</label>
-                        </div>
-                        <div className="front">
+                        </Box>
+                        <Box className="front">
                             <h2>Pineapple</h2>
                             <p>some paragraph about apple.</p>
                             <label className="next-btn" htmlFor="c2">Next</label>
-                        </div>
-                    </div>
-                    <div className="flip" id ="p3">
-                        <div className="back">
+                        </Box>
+                    </Box>
+                    <Box className="flip" id ="p3">
+                        <Box className="back">
                             my second page.
                             <label className="back-btn" htmlFor="c3">Back</label>
-                        </div>
-                        <div className="front">
+                        </Box>
+                        <Box className="front">
                             <h2>Strawberry</h2>
                             <p>some paragraph about apple.</p>
                             <label className="next-btn" htmlFor="c3">Next</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </Box>
+                    </Box> */}
+                </Box>
+            </Box>
+        </Box>
         )
     }
 }

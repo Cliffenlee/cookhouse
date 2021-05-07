@@ -2,7 +2,7 @@ import React from 'react'
 import {Box, Tag} from '@chakra-ui/react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 
-export default function Back({selector}) {
+export default function Back({recipe, selector}) {
     return (
         <Box className="back">
             Item description.

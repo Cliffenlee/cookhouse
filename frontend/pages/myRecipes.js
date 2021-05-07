@@ -10,6 +10,7 @@ import Description from '../components/Recipe/Description';
 import Back from '../components/Recipe/Back';
 import Front from '../components/Recipe/Front';
 import SearchPage from '../components/Recipe/SearchPage';
+import BackCover from '../components/Recipe/BackCover';
 
 class Recipe extends Component {
     constructor(props) {
@@ -131,14 +132,21 @@ class Recipe extends Component {
                         <SearchPage recipes={recipes} selector="c0"/>
                     </Box>
                     {recipes.map((recipe, index)=> {
-                        return (
-                            <Box key={index} className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
-                                <Back selector={"c"+(index+1)} />
-                                <Flex position="relative" flexDirection="column" className="front" padding={5} overflowY="scroll" overflowX="hidden">
-                                <Front key={index} instructions={recipe.instructions} selector={"c"+(index+1)} recipeName={recipe.name} />
-                                </Flex>
-                            </Box>
-                        )
+                        if (index == recipes.length - 1) {
+                            return (
+                                <Box key={index} className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
+                                    <BackCover selector={"c"+(index+1)} />
+                                    <Front key={index} instructions={recipe.instructions} selector={"c"+(index+1)} recipeName={recipe.name} />
+                                </Box>
+                            )
+                        } else {
+                            return (
+                                <Box key={index} className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
+                                    <Back recipe={recipe} selector={"c"+(index+1)} />
+                                    <Front key={index} instructions={recipe.instructions} selector={"c"+(index+1)} recipeName={recipe.name} />
+                                </Box>
+                            )
+                        }
                     })}
                     {/* <Box className="flip" id ="p1">
                         <Box className="back">

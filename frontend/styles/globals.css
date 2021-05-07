@@ -73,6 +73,12 @@ a {
   font-size: 36px
 }
 
+hr {
+  width: 100%;
+  border-top: #cdcdd1 solid 1px;
+  padding: 5px 0;
+}
+
 .body {
   margin: 0;
   padding: 0;
@@ -137,12 +143,10 @@ p{
   height: 100%;
   top: 0;
   left: 0;
+  padding: 0;
   background-color: #F5F5F5;
   box-sizing: border-box;
-  padding: 0 13px;
   background-image: linear-gradient(90deg, rgba(227,227,227,1) 0%, rgba(247,247,247,0) 18%);
-  /* box-shadow: inset 20px 0 50px rgba(0,0,0,0.5) 0 2px rgba(0,0,0,0.5); */
-  /* box-shadow: 20px 20px 50px 15px grey; */
 }
 
 .back {
@@ -151,7 +155,7 @@ p{
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 00;
+  z-index: 0;
   transform: rotateY(180deg);
   backface-visibility: hidden;
   background-color: #F5F5F5;

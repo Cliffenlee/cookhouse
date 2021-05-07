@@ -1,12 +1,12 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons'
-import { Box, Heading, Text } from '@chakra-ui/layout'
+import { Box, Flex, Heading, Text } from '@chakra-ui/layout'
 import { Tag } from '@chakra-ui/tag'
 import React from 'react'
 
 export default function Front({instructions, selector, recipeName}) {
     return (
-        <Box className="front">
-            <Heading textTransform="uppercase" mt={3} mb={8}>{recipeName}</Heading>
+        <Flex position="relative" flexDirection="column" overflowY="scroll" overflowX="hidden" className="front" padding={8}>
+            <Heading textTransform="uppercase" mb={8}>{recipeName}</Heading>
             {instructions.map((instruction, instructionIndex) => {
                 return (
                 <Box key={instructionIndex} position="relative" borderWidth="2px" borderColor="gray.300" padding={5} borderRadius="lg" my="4">
@@ -20,6 +20,6 @@ export default function Front({instructions, selector, recipeName}) {
                     <ArrowForwardIcon/>
                 </Tag>
             </label>
-        </Box>
+        </Flex>
     )
 }

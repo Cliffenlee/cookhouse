@@ -12,9 +12,9 @@ export default function NavBar() {
         <Flex className="nav-bar">
             <Logo />
             <Flex>
-                <NavBarLink name="MY RECIPES" link="/recipes" />
+                <NavBarLink name="MY RECIPES" link="/myRecipes" />
                 <NavBarLink name="PROFILE" link="/profile" />
-                <NavBarLink name="Recipe" link="/recipe" />
+                <NavBarLink name="LOG IN" link="/login" />
             </Flex>
         </Flex>
     )

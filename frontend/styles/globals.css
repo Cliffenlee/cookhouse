@@ -181,24 +181,3 @@ p{
   backface-visibility: hidden;
   cursor: pointer;
 }
-
-
-#c0:checked ~.flip-book #p0 {
-  transform: rotateY(-180deg);
-  z-index: 1;
-}
-
-#c1:checked ~.flip-book #p1 {
-  transform: rotateY(-180deg);
-  z-index: 2;
-}
-
-#c2:checked ~.flip-book #p2 {
-  transform: rotateY(-180deg);
-  z-index: 3;
-}
-
-#c3:checked ~.flip-book #p3 {
-  transform: rotateY(-180deg);
-  z-index: 4;
-}

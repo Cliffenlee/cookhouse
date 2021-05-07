@@ -3,7 +3,7 @@ import axios from 'axios';
 import Loader from '../components/common/Loader'
 import Error from "../components/common/Error"
 import { Box, Center, Flex, Stack } from '@chakra-ui/layout'
-import { Text, Heading, Tag } from "@chakra-ui/react"
+import { Text, Heading, Tag, VisuallyHidden, Checkbox } from "@chakra-ui/react"
 import { Input } from "@chakra-ui/input"
 import {ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
 import Description from '../components/Recipe/Description';
@@ -22,20 +22,30 @@ class Recipe extends Component {
         }
     }
 
+    handleCheck = (event) => {
+        const index = parseInt(event.target.id.substring(1))
+        const pageId = "p" + index
+        if (event.target.checked) {
+            const zIndex = index+1
+            document.getElementById(pageId).style = `transform: rotateY(-180deg); z-index:${zIndex};`
+        }
+        else {
+            const zIndex = pageId == "p0" ? 99 : this.state.recipes.length- index
+            document.getElementById(pageId).style = `transform: rotateY(0deg); z-index:${zIndex};`
+        }
+    }
+
     async getAllRecipes() {
         this.setState({loading: true})
         try {
             let data = await axios.get('http://localhost:8080/recipes')
-            // data=[]
-            console.log(data)
-            this.setState({recipes: data == undefined || data.length == 0 ? null : data.data.slice(0,3)})
+            this.setState({recipes: data == undefined || data.length == 0 ? null : data.data})
             if (data !== undefined && data.length !== 0) {
                 const first = data.data[0]
                 this.setState({
                     firstDescription: <Description name={first.name} tools={first.tools} ingredients={first.ingredients} nutrition={first.nutrition} />
                 })
             }
-            console.log(this.state.recipes)
         } catch (error) {
             console.log(error)
             this.setState({error: true})
@@ -68,7 +78,7 @@ class Recipe extends Component {
             return (
                 <Box className="body">
                     <Box className="book">
-                    <input type="checkbox" id="c0"/>
+                    <input onChange={this.handleCheck} type="checkbox" id="c0"/>
                         <Box id="cover">
                             <Heading mx={8} my={8} textAlign="start">
                                 No recipes available.
@@ -108,9 +118,9 @@ class Recipe extends Component {
         return (
         <Box className="body">
             <Box className="book">
-            <input type="checkbox" id="c0"/>
+            <input onChange={this.handleCheck} type="checkbox" id="c0"/>
             {recipes.map((recipe, index)=> {
-                return <input key={index+1} type="checkbox" id={"c"+(index+1)}/>
+                return <input onChange={this.handleCheck} key={index+1} type="checkbox" id={"c"+(index+1)}/>
             })}
                 <Box id="cover">
                     <Heading mx={8} my={8} textAlign="start">
@@ -127,7 +137,7 @@ class Recipe extends Component {
                     </Box>
                 </Box>
                 <Box className="flip-book">
-                    <Box className="flip" zIndex={99} id ="p0">
+                    <Box className="flip" zIndex={recipes.length + 99} id ="p0">
                         <Back recipe={recipes[0]} selector="c0"/>
                         <SearchPage recipes={recipes} selector="c0"/>
                     </Box>

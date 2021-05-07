@@ -9,6 +9,7 @@ import Back from '../components/Recipe/Back';
 import Front from '../components/Recipe/Front';
 import SearchPage from '../components/Recipe/SearchPage';
 import BackCover from '../components/Recipe/BackCover';
+import NoRecipe from '../components/Recipe/NoRecipe';
 
 class Recipe extends Component {
     constructor(props) {
@@ -24,12 +25,17 @@ class Recipe extends Component {
         const index = parseInt(event.target.id.substring(1))
         console.log("index", index)
         const pageId = "p" + index
+        let zIndex
         if (event.target.checked) {
-            const zIndex = index+1
+             zIndex = index+1
             document.getElementById(pageId).style = `transform: rotateY(-180deg); z-index:${zIndex};`
         }
         else {
-            const zIndex = pageId == "p0" ? this.state.recipes.length+2 : this.state.recipes.length- index + 1
+            if (this.state.recipes == undefined || this.state.recipes.length == 0) {
+                zIndex = 1
+            } else {
+                zIndex = pageId == "p0" ? this.state.recipes.length+2 : this.state.recipes.length- index + 1
+            }
             document.getElementById(pageId).style = `transform: rotateY(0deg); z-index:${zIndex};`
         }
     }
@@ -78,13 +84,13 @@ class Recipe extends Component {
                     <input onChange={this.handleCheck} type="checkbox" id="c0"/>
                         <Box id="cover">
                             <Heading mx={8} my={8} textAlign="start">
-                                No recipes available.
+                                COVER PAGE
                             </Heading>
                         </Box>
                         <Box className="flip-book">
                             <Box className="flip" zIndex={99} id ="p0">
                                 <BackCover selector="c0"/>
-                                <SearchPage selector="c0" recipes={recipes}/>
+                                <NoRecipe/>
                             </Box>
                         </Box>
                     </Box>

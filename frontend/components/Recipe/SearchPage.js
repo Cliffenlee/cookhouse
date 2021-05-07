@@ -14,7 +14,6 @@ export default function SearchPage({selector, recipes}) {
     }
 
     function navigate(page) {
-        console.log("c"+page)
         for (let i = 0; i < page+1; i ++) {
             var box = document.getElementById("c"+i)
             box.checked = !box.checked;
@@ -34,13 +33,9 @@ export default function SearchPage({selector, recipes}) {
         }
     }
 
-    const handleClick = (event) => {
-        console.log(event.target)
-    }
-
     return (
         <Box className="front">
-            <Flex flexDirection="column" justifyContent="center" alignItems="center" padding={8}>
+            <Flex height="100%" flexDirection="column" alignItems="center" padding={8}>
                 <Heading mb={4}>
                     MY RECIPES
                 </Heading>
@@ -50,8 +45,10 @@ export default function SearchPage({selector, recipes}) {
                     children={ <SearchIcon color="blackAlpha.500"/> }/>
                     <Input value={value} onChange={handleChange} boxShadow="0 0 5px #808080" color={'blackAlpha.700'} focusBorderColor="blue.400" placeholder="Search for a recipe"/>
                 </InputGroup>
-                <Flex width="100%" flexDirection="column" justifyContent="center" alignItems="center" paddingY={5}>
+                <Box width="100%" pt={5}>
                     <hr/>
+                </Box>
+                <Flex width="100%" flexDirection="column" alignItems="center" paddingY={3} overflowY="scroll" overflowX="hidden">
                     {results.map((result, index) => {
                         return <SearchResult navigate={navigate} handler={handler} key={index} result={result}/>
                     })}

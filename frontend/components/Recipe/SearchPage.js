@@ -1,31 +1,49 @@
 import { ArrowForwardIcon, SearchIcon } from '@chakra-ui/icons'
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
-import { Box, Flex } from '@chakra-ui/layout'
+import { Box, Flex, Heading } from '@chakra-ui/layout'
 import { Tag } from '@chakra-ui/tag'
 import React from 'react'
 import SearchResult from './SearchResult'
 
 export default function SearchPage({selector, recipes}) {
     const [value, setValue] = React.useState("")
-    const [result, setResult] = React.useState([])
-    const [divider, setDivider] = React.useState("")
+    const [results, setResults] = React.useState(recipes)
+    function handler() {
+        setValue("")
+        setResults(recipes)
+    }
+
+    function navigate(page) {
+        console.log("c"+page)
+        for (let i = 0; i < page+1; i ++) {
+            var box = document.getElementById("c"+i)
+            box.checked = !box.checked;
+            document.getElementById("p"+i).style = `transform: rotateY(-180deg); z-index:${i+1};transition: all 2s cubic-bezier(0.3, 0.025, 0.155, 1);`
+        }
+    }
+
     const handleChange = (event) => {
         setValue(event.target.value)
         if (event.target.value.trim() == "" || event.target.value.length <= 1 ) {
-            setResult([])
-            setDivider("")
+            setResults(recipes)
         } else {
             const newResult = recipes.filter( recipe => {
-                return recipe.name.toLowerCase().replace(/ /g, '').includes(event.target.value.toLowerCase(/ /g, ''))
+                return recipe.name.toLowerCase().includes(event.target.value.toLowerCase())
             })
-            setResult(newResult)
-            newResult.length > 0 ? setDivider(<hr/>) : setDivider("")
+            setResults(newResult)
         }
+    }
+
+    const handleClick = (event) => {
+        console.log(event.target)
     }
 
     return (
         <Box className="front">
             <Flex flexDirection="column" justifyContent="center" alignItems="center" padding={8}>
+                <Heading mb={4}>
+                    MY RECIPES
+                </Heading>
                 <InputGroup size="lg">
                     <InputLeftElement
                     pointerEvents="none"
@@ -33,9 +51,9 @@ export default function SearchPage({selector, recipes}) {
                     <Input value={value} onChange={handleChange} boxShadow="0 0 5px #808080" color={'blackAlpha.700'} focusBorderColor="blue.400" placeholder="Search for a recipe"/>
                 </InputGroup>
                 <Flex width="100%" flexDirection="column" justifyContent="center" alignItems="center" paddingY={5}>
-                    {divider}
-                    {result.map((result, index) => {
-                        return <SearchResult key={index} result={result}/>
+                    <hr/>
+                    {results.map((result, index) => {
+                        return <SearchResult navigate={navigate} handler={handler} key={index} result={result}/>
                     })}
                 </Flex>
             </Flex>

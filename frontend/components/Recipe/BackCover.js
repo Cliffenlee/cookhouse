@@ -5,15 +5,17 @@ import { ArrowBackIcon } from '@chakra-ui/icons'
 
 export default function BackCover({selector}) {
     return (
-        <Flex className="back" justifyContent="center" alignItems="center">
-            <Box fontFamily="Artbrush" fontSize="80px">
-                cookhouse
-            </Box>
+        <Box className="back">
+            <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
+                <Text className="back-logo">
+                    cookhouse
+                </Text>
+            </Flex>
             <label className="back-btn" htmlFor={selector}>
                 <Tag padding={5}>
                     <ArrowBackIcon/>
                 </Tag>
             </label>
-        </Flex>
+        </Box>
     )
 }

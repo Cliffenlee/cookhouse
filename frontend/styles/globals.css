@@ -137,6 +137,10 @@ p{
   line-height: 14px;
 }
 
+.search-result {
+  cursor: pointer;
+}
+
 .front {
   position: absolute;
   width: 100%;

@@ -2,10 +2,8 @@ import React, { Component }  from 'react'
 import axios from 'axios';
 import Loader from '../components/common/Loader'
 import Error from "../components/common/Error"
-import { Box, Center, Flex, Stack } from '@chakra-ui/layout'
-import { Text, Heading, Tag, VisuallyHidden, Checkbox } from "@chakra-ui/react"
-import { Input } from "@chakra-ui/input"
-import {ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
+import { Box } from '@chakra-ui/layout'
+import { Heading } from "@chakra-ui/react"
 import Description from '../components/Recipe/Description';
 import Back from '../components/Recipe/Back';
 import Front from '../components/Recipe/Front';
@@ -24,13 +22,14 @@ class Recipe extends Component {
 
     handleCheck = (event) => {
         const index = parseInt(event.target.id.substring(1))
+        console.log("index", index)
         const pageId = "p" + index
         if (event.target.checked) {
             const zIndex = index+1
             document.getElementById(pageId).style = `transform: rotateY(-180deg); z-index:${zIndex};`
         }
         else {
-            const zIndex = pageId == "p0" ? 99 : this.state.recipes.length- index
+            const zIndex = pageId == "p0" ? this.state.recipes.length+2 : this.state.recipes.length- index + 1
             document.getElementById(pageId).style = `transform: rotateY(0deg); z-index:${zIndex};`
         }
     }
@@ -39,13 +38,11 @@ class Recipe extends Component {
         this.setState({loading: true})
         try {
             let data = await axios.get('http://localhost:8080/recipes')
-            this.setState({recipes: data == undefined || data.length == 0 ? null : data.data})
-            if (data !== undefined && data.length !== 0) {
-                const first = data.data[0]
-                this.setState({
-                    firstDescription: <Description name={first.name} tools={first.tools} ingredients={first.ingredients} nutrition={first.nutrition} />
-                })
+            let recipesWithIndex
+            if (data.data !== undefined && data.data.length !== 0) {
+                recipesWithIndex = data.data.map((recipe, index) => ({...recipe, page:index}))
             }
+            this.setState({recipes: data == undefined || data.length == 0 ? null : recipesWithIndex})
         } catch (error) {
             console.log(error)
             this.setState({error: true})
@@ -86,28 +83,8 @@ class Recipe extends Component {
                         </Box>
                         <Box className="flip-book">
                             <Box className="flip" zIndex={99} id ="p0">
-                                <Box className="back">
-                                    <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
-                                        <Text className="back-logo">
-                                            cookhouse
-                                        </Text>
-                                    </Flex>
-                                    <label className="back-btn" htmlFor="c0">
-                                        <Tag padding={5}>
-                                            <ArrowBackIcon/>
-                                        </Tag>
-                                    </label>
-                                </Box>
-                                <Box className="front">
-                                    <Flex flexDirection="column" justifyContent="center" alignItems="center" padding={8}>
-                                        <Input focusBorderColor="pink.400" placeholder="Search for a recipe"></Input>
-                                    </Flex>
-                                    <label className="next-btn" htmlFor="c0">
-                                        <Tag padding={5}>
-                                            <ArrowForwardIcon/>
-                                        </Tag>
-                                    </label>
-                                </Box>
+                                <BackCover selector="c0"/>
+                                <SearchPage selector="c0" recipes={recipes}/>
                             </Box>
                         </Box>
                     </Box>
@@ -124,20 +101,11 @@ class Recipe extends Component {
             })}
                 <Box id="cover">
                     <Heading mx={8} my={8} textAlign="start">
-                        MY RECIPES
+                        COVER PAGE
                     </Heading>
-                    <Box mx={5}>
-                        {recipes.map((recipe, index)=> {
-                            return (
-                                <Text key={index} p={3} lineHeight="1.5" fontSize="md">
-                                    {index+1}. {recipe.name}
-                                </Text>
-                            )
-                        })}
-                    </Box>
                 </Box>
                 <Box className="flip-book">
-                    <Box className="flip" zIndex={recipes.length + 99} id ="p0">
+                    <Box className="flip" zIndex={recipes.length+2} id ="p0">
                         <Back recipe={recipes[0]} selector="c0"/>
                         <SearchPage recipes={recipes} selector="c0"/>
                     </Box>

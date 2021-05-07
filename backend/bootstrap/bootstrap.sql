@@ -26,16 +26,17 @@ CREATE TABLE IF NOT EXISTS recipe (
   	user_id int NOT NULL,
 	name VARCHAR(40) NOT NULL,
 	serving int NOT NULL,
+	image_name VARCHAR(40),
   	PRIMARY KEY (id),
   	FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 
-INSERT INTO recipe (user_id, name, serving) VALUES
-("1", "Egg tarts from the heart", "16"),
-("1", "Steak that will sway vegans", "2"),
-("2", "Brownies that take away the frownies", "16"),
-("3", "Fish that make you go SHEESH", "1");
+INSERT INTO recipe (user_id, name, serving, image_name) VALUES
+("1", "Egg tarts from the heart", "16", "eggtart.jpg"),
+("1", "Steak that will sway vegans", "2", "steak.jpg"),
+("2", "Brownies that take away the frownies", "16", "brownie.jpg"),
+("3", "Fish that make you go SHEESH", "1", "salmon.jpg");
 
 DROP TABLE IF EXISTS instruction;
 CREATE TABLE IF NOT EXISTS instruction (

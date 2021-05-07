@@ -128,7 +128,7 @@ class Recipe extends Component {
                 </Box>
                 <Box className="flip-book">
                     <Box className="flip" zIndex={99} id ="p0">
-                        <Back selector="c0"/>
+                        <Back recipe={recipes[0]} selector="c0"/>
                         <SearchPage recipes={recipes} selector="c0"/>
                     </Box>
                     {recipes.map((recipe, index)=> {
@@ -142,7 +142,7 @@ class Recipe extends Component {
                         } else {
                             return (
                                 <Box key={index} className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
-                                    <Back recipe={recipe} selector={"c"+(index+1)} />
+                                    <Back recipe={recipes[index+1]} selector={"c"+(index+1)} />
                                     <Front key={index} instructions={recipe.instructions} selector={"c"+(index+1)} recipeName={recipe.name} />
                                 </Box>
                             )

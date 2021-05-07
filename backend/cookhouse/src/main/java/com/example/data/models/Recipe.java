@@ -30,6 +30,8 @@ public @Data class Recipe {
     @Size(max=40, message = "Recipe name must be between 1 to 40 characters!")
     private String name;
 
+    private String image_name;
+
     @Column(name="user_id")
     private int user_id;
 

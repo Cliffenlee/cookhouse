@@ -2,7 +2,8 @@ import React from 'react'
 import {Box, Flex, Heading, Image, ListItem, Tag, Text, UnorderedList} from '@chakra-ui/react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 
-export default function Back({recipe, selector}) {
+export default function Back({toHomePage, recipe, selector}) {
+    const bookmark = selector == "c0" ? <div onClick={toHomePage} className="bookmark-back">Return to front</div> : ""
     return (
         <Box className="back">
             <Image height="50%" src={"/assets/"+recipe.image_name} alt={recipe.name}></Image>
@@ -39,6 +40,7 @@ export default function Back({recipe, selector}) {
                     })}
                 </Flex>
             </Flex>
+            {bookmark}
             <label className="back-btn" htmlFor={selector}>
                 <Tag padding={5}>
                     <ArrowBackIcon/>

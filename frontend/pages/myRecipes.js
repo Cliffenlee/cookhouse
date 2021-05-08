@@ -56,6 +56,19 @@ class Recipe extends Component {
         }
     }
 
+    async toHomePage() {
+        const checked = Array.from(document.getElementsByClassName("checkbox")).filter(document => document.checked)
+        for (let i = checked.length-1; i >= 0; i --) {
+            checked[i].checked = false
+            if (i == 0) {
+                document.getElementById("p"+i).style = `transform: rotateY(0deg); z-index:${this.state.recipes.length + 2};transition: all 2s cubic-bezier(0.3, 0.025, 0.155, 1);`
+            } else {
+                document.getElementById("p"+i).style = `transform: rotateY(0deg); z-index:${this.state.recipes.length - i};transition: all 2s cubic-bezier(0.3, 0.025, 0.155, 1);`
+            }
+            await new Promise(r => setTimeout(r, 100));
+        }
+    }
+
     componentDidMount() {
         this.getAllRecipes()
     }
@@ -80,7 +93,7 @@ class Recipe extends Component {
             return (
                 <Box className="body">
                     <Box className="book">
-                    <input onChange={this.handleCheck} type="checkbox" id="c0"/>
+                    <input className="checkbox" onChange={this.handleCheck} type="checkbox" id="c0"/>
                         <Box id="cover">
                             <Heading mx={8} my={8} textAlign="start">
                                 COVER PAGE
@@ -100,9 +113,9 @@ class Recipe extends Component {
         return (
         <Box className="body">
             <Box className="book">
-            <input onChange={this.handleCheck} type="checkbox" id="c0"/>
+            <input className="checkbox" onChange={this.handleCheck} type="checkbox" id="c0"/>
             {recipes.map((recipe, index)=> {
-                return <input onChange={this.handleCheck} key={index+1} type="checkbox" id={"c"+(index+1)}/>
+                return <input className="checkbox" onChange={this.handleCheck} key={index+1} type="checkbox" id={"c"+(index+1)}/>
             })}
                 <Box id="cover">
                     <Heading mx={8} my={8} textAlign="start">
@@ -111,8 +124,8 @@ class Recipe extends Component {
                 </Box>
                 <Box className="flip-book">
                     <Box className="flip" zIndex={recipes.length+2} id ="p0">
-                        <Back recipe={recipes[0]} selector="c0"/>
                         <SearchPage recipes={recipes} selector="c0"/>
+                        <Back toHomePage={this.toHomePage.bind(this)}recipe={recipes[0]} selector="c0"/>
                     </Box>
                     {recipes.map((recipe, index)=> {
                         if (index == recipes.length - 1) {
@@ -125,45 +138,12 @@ class Recipe extends Component {
                         } else {
                             return (
                                 <Box key={index} className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
-                                    <Back recipe={recipes[index+1]} selector={"c"+(index+1)} />
+                                    <Back toHomePage={this.toHomePage.bind(this)}recipe={recipes[index+1]} selector={"c"+(index+1)} />
                                     <Front key={index} instructions={recipe.instructions} selector={"c"+(index+1)} recipeName={recipe.name} />
                                 </Box>
                             )
                         }
                     })}
-                    {/* <Box className="flip" id ="p1">
-                        <Box className="back">
-                            my second page.
-                            <label className="back-btn" htmlFor={"c"+"1"}>Back</label>
-                        </Box>
-                        <Box className="front">
-                            <h2>Apple</h2>
-                            <p>some paragraph about apple.</p>
-                            <label className="next-btn" htmlFor={"c"+"1"}>Next</label>
-                        </Box>
-                    </Box>
-                    <Box className="flip" id ="p2">
-                        <Box className="back">
-                            my second page.
-                            <label className="back-btn" htmlFor="c2">Back</label>
-                        </Box>
-                        <Box className="front">
-                            <h2>Pineapple</h2>
-                            <p>some paragraph about apple.</p>
-                            <label className="next-btn" htmlFor="c2">Next</label>
-                        </Box>
-                    </Box>
-                    <Box className="flip" id ="p3">
-                        <Box className="back">
-                            my second page.
-                            <label className="back-btn" htmlFor="c3">Back</label>
-                        </Box>
-                        <Box className="front">
-                            <h2>Strawberry</h2>
-                            <p>some paragraph about apple.</p>
-                            <label className="next-btn" htmlFor="c3">Next</label>
-                        </Box>
-                    </Box> */}
                 </Box>
             </Box>
         </Box>

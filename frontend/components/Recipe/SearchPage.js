@@ -13,11 +13,12 @@ export default function SearchPage({selector, recipes}) {
         setResults(recipes)
     }
 
-    function navigate(page) {
+    async function navigate(page) {
         for (let i = 0; i < page+1; i ++) {
             var box = document.getElementById("c"+i)
             box.checked = !box.checked;
             document.getElementById("p"+i).style = `transform: rotateY(-180deg); z-index:${i+1};transition: all 2s cubic-bezier(0.3, 0.025, 0.155, 1);`
+            await new Promise(r => setTimeout(r, 100));
         }
     }
 
@@ -34,7 +35,7 @@ export default function SearchPage({selector, recipes}) {
     }
 
     return (
-        <Box className="front">
+        <Box className="front" position="relative">
             <Flex height="100%" flexDirection="column" alignItems="center" padding={8}>
                 <Heading mb={4}>
                     MY RECIPES
@@ -59,7 +60,11 @@ export default function SearchPage({selector, recipes}) {
                     <ArrowForwardIcon/>
                 </Tag>
             </label>
-
+            <Box className="bookmark">
+                    <div className="bookmark-front">
+                        My Recipe Book
+                    </div>
+            </Box>
         </Box>
     )
 }

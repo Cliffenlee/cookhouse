@@ -9,12 +9,10 @@ export default function SearchResult({index, result, handler, navigate}) {
         }
     }
     return (
-        <Box onClick={handleClick} width="100%" borderWidth="3px" backgroundColor="gray.200" borderRadius="10px" padding={5} marginY={2}>
-            <div width="100%" height="100%" className="search-result">
+            <div onClick={handleClick} className="search-result">
                 <Text fontSize="xl" lineHeight="1.2">
                     {result.name}
                 </Text>
             </div>
-        </Box>
     )
 }

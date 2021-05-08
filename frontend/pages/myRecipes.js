@@ -4,7 +4,6 @@ import Loader from '../components/common/Loader'
 import Error from "../components/common/Error"
 import { Box } from '@chakra-ui/layout'
 import { Heading } from "@chakra-ui/react"
-import Description from '../components/Recipe/Description';
 import Back from '../components/Recipe/Back';
 import Front from '../components/Recipe/Front';
 import SearchPage from '../components/Recipe/SearchPage';

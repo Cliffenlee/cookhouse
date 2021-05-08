@@ -61,9 +61,9 @@ class Recipe extends Component {
         for (let i = checked.length-1; i >= 0; i --) {
             checked[i].checked = false
             if (i == 0) {
-                document.getElementById("p"+i).style = `transform: rotateY(0deg); z-index:${this.state.recipes.length + 2};transition: all 2s cubic-bezier(0.3, 0.025, 0.155, 1);`
+                document.getElementById("p"+i).style = `transform: rotateY(0deg); z-index:${this.state.recipes.length + 5};transition: all 0.9s cubic-bezier(0.2, 0.015, 0.055, 1);`
             } else {
-                document.getElementById("p"+i).style = `transform: rotateY(0deg); z-index:${this.state.recipes.length - i};transition: all 2s cubic-bezier(0.3, 0.025, 0.155, 1);`
+                document.getElementById("p"+i).style = `transform: rotateY(0deg); z-index:${this.state.recipes.length - i + 1};transition: all 0.9s cubic-bezier(0.3, 0.025, 0.155, 1);`
             }
             await new Promise(r => setTimeout(r, 100));
         }

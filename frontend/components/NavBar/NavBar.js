@@ -12,7 +12,7 @@ export default function NavBar() {
     const {isOpen, onOpen, onClose} = useDisclosure()
     return (
         <Flex className="nav-bar">
-            <Drawer colorScheme="blue" placement="left" onClose={onClose} isOpen={isOpen} >
+            <Drawer placement="left" onClose={onClose} isOpen={isOpen} >
                 <DrawerOverlay/>
                 <DrawerContent>
                     <DrawerHeader borderBottomWidth="1px">

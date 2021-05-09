@@ -9,6 +9,7 @@ import Front from '../components/Recipe/Front';
 import SearchPage from '../components/Recipe/SearchPage';
 import BackCover from '../components/Recipe/BackCover';
 import NoRecipe from '../components/Recipe/NoRecipe';
+import Background from '../components/common/Background';
 
 class Recipe extends Component {
     constructor(props) {
@@ -112,6 +113,7 @@ class Recipe extends Component {
 
         return (
         <Box className="body">
+            <Background/>
             <Box className="book">
             <input className="checkbox" onChange={this.handleCheck} type="checkbox" id="c0"/>
             {recipes.map((recipe, index)=> {

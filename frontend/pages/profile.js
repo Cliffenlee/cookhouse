@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function explore() {
     return (
-        <Flex height="93vh" background="white" justifyContent="center" alignItems="center">
+        <Flex height="100vh" background="white" justifyContent="center" alignItems="center">
             <a className="big-medium">Profile page</a>
         </Flex>
     )

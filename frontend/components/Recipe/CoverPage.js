@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/button'
 import { useDisclosure } from '@chakra-ui/hooks'
-import { AddIcon, EditIcon } from '@chakra-ui/icons'
+import { AddIcon, CloseIcon, EditIcon } from '@chakra-ui/icons'
 import { Input, InputGroup, InputRightAddon, InputRightElement } from '@chakra-ui/input'
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
@@ -82,7 +82,7 @@ export default function CoverPage() {
                     <Input placeholder="Tools" onKeyDown={addTool} ref={toolRef} />
                     <Box mt={2}>
                         {tools.map((tool, index) => {
-                            return <Tag colorScheme="green" key={index} p={2} mr={2} cursor="pointer" onClick={() => removeTool(index)}>{tool}</Tag>
+                            return <Tag colorScheme="green" key={index} py={2} mr={2} cursor="pointer" onClick={() => removeTool(index)}>{tool}<CloseIcon ml={2} fontSize="0.5rem"/></Tag>
                         })}
                     </Box>
                 </Box>

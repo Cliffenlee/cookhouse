@@ -10,6 +10,7 @@ import SearchPage from '../components/Recipe/SearchPage';
 import BackCover from '../components/Recipe/BackCover';
 import NoRecipe from '../components/Recipe/NoRecipe';
 import Background from '../components/common/Background';
+import CoverPage from '../components/Recipe/CoverPage';
 
 class Recipe extends Component {
     constructor(props) {
@@ -119,11 +120,7 @@ class Recipe extends Component {
             {recipes.map((recipe, index)=> {
                 return <input className="checkbox" onChange={this.handleCheck} key={index+1} type="checkbox" id={"c"+(index+1)}/>
             })}
-                <Box id="cover">
-                    <Heading mx={8} my={8} textAlign="start">
-                        COVER PAGE
-                    </Heading>
-                </Box>
+                <CoverPage />
                 <Box className="flip-book">
                     <Box className="flip" zIndex={recipes.length+2} id ="p0">
                         <SearchPage recipes={recipes} selector="c0"/>

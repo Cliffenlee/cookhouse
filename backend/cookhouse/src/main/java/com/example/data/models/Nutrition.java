@@ -38,7 +38,7 @@ public @Data class Nutrition {
                 ", cholesterol=" + cholesterol +
                 ", sodium=" + sodium +
                 ", sugar=" + sugar +
-                ", fibre=" + fibre +
+                ", fibre=" + fiber +
                 '}';
     }
 
@@ -49,6 +49,6 @@ public @Data class Nutrition {
     private Float cholesterol;
     private Float sodium;
     private Float sugar;
-    private Float fibre;
+    private Float fiber;
 
 }

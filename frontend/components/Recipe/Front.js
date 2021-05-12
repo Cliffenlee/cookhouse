@@ -32,11 +32,11 @@ export default function Front({recipe, selector}) {
                                     </Heading>
                                 </PopoverHeader>
                                 <PopoverBody>
-                                    <Flex>
+                                    <Flex mt={2}>
                                         <Flex mr={4} flexDirection="column" alignItems="center" justifyContent="center">
                                             <Box>
                                                 <Text mb={2}>
-                                                    Calories: {recipe.nutrition.calories}
+                                                    Calories: {recipe.nutrition.calories}kcals
                                                 </Text>
                                                 <Text mb={2}>
                                                     Carbohydrates: {recipe.nutrition.carbohydrates}g

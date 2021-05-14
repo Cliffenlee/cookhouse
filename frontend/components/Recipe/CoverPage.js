@@ -8,9 +8,11 @@ import { NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInpu
 import { Tag } from '@chakra-ui/tag'
 import { Textarea } from '@chakra-ui/textarea'
 import axios from 'axios'
+import { Image } from '@chakra-ui/react'
 import React, { createRef, useState } from 'react'
 import Loader from '../common/Loader'
 import Error from '../common/Error'
+import {useDropzone} from 'react-dropzone'
 
 export default function CoverPage() {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -36,6 +38,23 @@ export default function CoverPage() {
     const sugarRef = React.createRef()
     const fiberRef = React.createRef()
     const servingRef = React.createRef()
+
+    // upload image
+    const {
+        acceptedFiles,
+        fileRejections,
+        getRootProps,
+        getInputProps
+      } = useDropzone({
+        accept: 'image/jpeg, image/png',
+        maxFiles: 1
+      })
+
+    const acceptedFileItems = acceptedFiles.map(file => (
+    <ListItem key={file.path}>
+        {file.path} - {file.size} bytes
+    </ListItem>
+    ));
 
     function addTool (event) {
         if (event.key == 'Enter') {
@@ -158,11 +177,11 @@ export default function CoverPage() {
                 {isLoading ?<ModalBody px="3vw"><Flex justifyContent="center" alignItems="center" width="100%" height="100%"><Loader/></Flex></ModalBody>:
                 <ModalBody overflow="scroll" justifyContent="center" px="3vw">
                     <Flex justifyContent="space-between" alignItems="center">
-                        <Input width="70%" variant="flushed" size="lg" ref={recipeNameRef} isRequired={true} placeholder="Recipe Name"/>
+                        <Input width="70%" variant="flushed" size="lg" ref={recipeNameRef} isRequired={true} placeholder="Recipe name"/>
                         <Flex width="20%" flexDirection="column">
-                            <Heading size="s" mb={2}>
+                            <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
                                 Serving size
-                            </Heading>
+                            </Text>
                             <NumberInput min={0} allowMouseWheel>
                                 <NumberInputField ref={servingRef}/>
                                 <NumberInputStepper>
@@ -173,9 +192,6 @@ export default function CoverPage() {
                         </Flex>
                     </Flex>
                     <Box mb="3vh">
-                        {/* <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
-                            Recipe Name
-                        </Text> */}
                     </Box>
                     <Box mb="3vh">
                         <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
@@ -223,85 +239,99 @@ export default function CoverPage() {
                             })}
                         </Box>
                     </Box>
-                    <Box mb="3vh" width="30%">
-                        <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
-                            Nutrition
-                        </Text>
-                        <Flex flexDirection="column">
-                            <InputGroup>
-                                <Input ref={caloriesRef} type="number"placeholder="Calories"/>
-                                <InputRightAddon
-                                    width = "25%"
-                                    justifyContent="center"
-                                    pointerEvents="none"
-                                    children="kcal"
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <Input ref={proteinRef} type="number"placeholder="Protein"/>
-                                <InputRightAddon
-                                    width = "25%"
-                                    justifyContent="center"
-                                    pointerEvents="none"
-                                    children="g"
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <Input ref={carbohydratesRef} type="number"placeholder="Carbohydrates"/>
-                                <InputRightAddon
-                                    width = "25%"
-                                    justifyContent="center"
-                                    pointerEvents="none"
-                                    children="g"
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <Input ref={fatRef} type="number"placeholder="Fat"/>
-                                <InputRightAddon
-                                    width = "25%"
-                                    justifyContent="center"
-                                    pointerEvents="none"
-                                    children="g"
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <Input ref={cholesterolRef} type="number"placeholder="Cholesterol"/>
-                                <InputRightAddon
-                                    width = "25%"
-                                    justifyContent="center"
-                                    pointerEvents="none"
-                                    children="mg"
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <Input ref={sodiumRef} type="number"placeholder="Sodium"/>
-                                <InputRightAddon
-                                    width = "25%"
-                                    justifyContent="center"
-                                    pointerEvents="none"
-                                    children="g"
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <Input ref={sugarRef} type="number"placeholder="Sugar"/>
-                                <InputRightAddon
-                                    width = "25%"
-                                    justifyContent="center"
-                                    pointerEvents="none"
-                                    children="mg"
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <Input ref={fiberRef} type="number"placeholder="Fiber"/>
-                                <InputRightAddon
-                                    width = "25%"
-                                    justifyContent="center"
-                                    pointerEvents="none"
-                                    children="g"
-                                />
-                            </InputGroup>
-                        </Flex>
-                    </Box>
+                    <Flex justifyContent="space-between" p={0}>
+                        <Box mb="3vh" width="30%">
+                            <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
+                                Nutrition
+                            </Text>
+                            <Flex flexDirection="column">
+                                <InputGroup>
+                                    <Input ref={caloriesRef} type="number"placeholder="Calories"/>
+                                    <InputRightAddon
+                                        width = "25%"
+                                        justifyContent="center"
+                                        pointerEvents="none"
+                                        children="kcal"
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <Input ref={proteinRef} type="number"placeholder="Protein"/>
+                                    <InputRightAddon
+                                        width = "25%"
+                                        justifyContent="center"
+                                        pointerEvents="none"
+                                        children="g"
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <Input ref={carbohydratesRef} type="number"placeholder="Carbohydrates"/>
+                                    <InputRightAddon
+                                        width = "25%"
+                                        justifyContent="center"
+                                        pointerEvents="none"
+                                        children="g"
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <Input ref={fatRef} type="number"placeholder="Fat"/>
+                                    <InputRightAddon
+                                        width = "25%"
+                                        justifyContent="center"
+                                        pointerEvents="none"
+                                        children="g"
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <Input ref={cholesterolRef} type="number"placeholder="Cholesterol"/>
+                                    <InputRightAddon
+                                        width = "25%"
+                                        justifyContent="center"
+                                        pointerEvents="none"
+                                        children="mg"
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <Input ref={sodiumRef} type="number"placeholder="Sodium"/>
+                                    <InputRightAddon
+                                        width = "25%"
+                                        justifyContent="center"
+                                        pointerEvents="none"
+                                        children="g"
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <Input ref={sugarRef} type="number"placeholder="Sugar"/>
+                                    <InputRightAddon
+                                        width = "25%"
+                                        justifyContent="center"
+                                        pointerEvents="none"
+                                        children="mg"
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <Input ref={fiberRef} type="number"placeholder="Fiber"/>
+                                    <InputRightAddon
+                                        width = "25%"
+                                        justifyContent="center"
+                                        pointerEvents="none"
+                                        children="g"
+                                    />
+                                </InputGroup>
+                            </Flex>
+                        </Box>
+                        <Box width="50%" p={0}>
+                            <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
+                                Recipe image
+                            </Text>
+                            <Flex mb={4} flexDirection="column" justifyContent="center" alignItems="center" cursor="pointer" textAlign="center" borderWidth="2px" height="50%" borderStyle="dotted" p={8} {...getRootProps({ className: 'dropzone' })}>
+                                <input {...getInputProps()} />
+                                    <Text fontSize="lg" color="gray.400" lineHeight="1.2" mb={2}>Drop your image here</Text>
+                                    <Text fontSize="xs" color="gray.400" lineHeight="1.2">(Only jpg and png images will be accepted)</Text>
+                            </Flex>
+                            <Text fontSize="md">Accepted files</Text>
+                            <List>{acceptedFileItems}</List>
+                        </Box>
+                    </Flex>
                     <Box mb="3vh">
                         <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb={7}>
                             Instructions

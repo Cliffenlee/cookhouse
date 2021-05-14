@@ -2,25 +2,40 @@ import { Button } from '@chakra-ui/button'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { AddIcon, CheckCircleIcon, CloseIcon, EditIcon, SmallCloseIcon } from '@chakra-ui/icons'
 import { Input, InputGroup, InputRightAddon, InputRightElement } from '@chakra-ui/input'
-import { Box, Flex, List, ListIcon, ListItem, Text } from '@chakra-ui/layout'
+import { Box, Flex, Heading, List, ListIcon, ListItem, Text } from '@chakra-ui/layout'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
+import { NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper } from '@chakra-ui/number-input'
 import { Tag } from '@chakra-ui/tag'
 import { Textarea } from '@chakra-ui/textarea'
+import axios from 'axios'
 import React, { createRef, useState } from 'react'
+import Loader from '../common/Loader'
+import Error from '../common/Error'
 
 export default function CoverPage() {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     // state
+    const [isLoading, setIsLoading] = useState(false)
     const [ingredients, setIngredients] = useState([])
     const [tools, setTools] = useState([])
     const [instructions, setInstructions] = useState([])
+    const [error, setError] = useState(false)
 
     // ref
     const recipeNameRef = React.createRef()
     const ingredientRef = React.createRef()
     const toolRef = React.createRef()
     const instructionRef = React.createRef()
+    const caloriesRef = React.createRef()
+    const proteinRef = React.createRef()
+    const carbohydratesRef = React.createRef()
+    const fatRef = React.createRef()
+    const cholesterolRef = React.createRef()
+    const sodiumRef = React.createRef()
+    const sugarRef = React.createRef()
+    const fiberRef = React.createRef()
+    const servingRef = React.createRef()
 
     function addTool (event) {
         if (event.key == 'Enter') {
@@ -44,7 +59,7 @@ export default function CoverPage() {
     }
 
     function addInstruction (event) {
-        if (event.key == 'Enter') {
+        if (event.key == 'Enter' || event.type == "click") {
             event.preventDefault()
             if (instructionRef.current.value.trim() == "") {
                 return
@@ -62,7 +77,7 @@ export default function CoverPage() {
     }
 
     function addIngredient (event) {
-        if (event.key == 'Enter') {
+        if (event.key == 'Enter' || event.type == "click") {
             if (ingredientRef.current.value.trim() == "") {
                 return
             }
@@ -76,6 +91,46 @@ export default function CoverPage() {
         const newIngredients = [...ingredients]
         index !== -1 ? newIngredients.splice(index,1) : ""
         ingredients == undefined || ingredients.length <= 0? setIngredients([]) : setIngredients(newIngredients)
+    }
+
+    async function createRecipe () {
+        console.log("im being executed")
+        setIsLoading(true)
+        try {
+            const requestBody = {
+                user_id: 1,
+                serving: parseInt(servingRef.current.value),
+                name: recipeNameRef.current.value,
+                nutrition: {
+                    calories: parseInt(caloriesRef.current.value),
+                    protein: parseInt(proteinRef.current.value),
+                    carbohydrates: parseInt(carbohydratesRef.current.value),
+                    fat: parseInt(fatRef.current.value),
+                    cholesterol: parseInt(cholesterolRef.current.value),
+                    sodium: parseInt(sodiumRef.current.value),
+                    sugar: parseInt(sugarRef.current.value),
+                    fiber: parseInt(fiberRef.current.value)
+                },
+                ingredients: ingredients.map(ingredient => {
+                    return {ingredient_name: null, description: ingredient}
+                }),
+                instructions: instructions.map((instruction, index) => {
+                    return {step: index+1, instruction: instruction}
+                }),
+                tools: tools.map(tool => {
+                    return {tool_name: tool}
+                })
+            }
+            console.log(requestBody)
+            let response = await axios.post("http://localhost:8080/recipe", requestBody)
+            console.log(response)
+        } catch (responseError) {
+            console.log(responseError)
+            setError(true)
+            // error toast
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -99,8 +154,24 @@ export default function CoverPage() {
                     New Recipe
                 </ModalHeader>
                 <ModalCloseButton />
+
+                {isLoading ?<ModalBody px="3vw"><Flex justifyContent="center" alignItems="center" width="100%" height="100%"><Loader/></Flex></ModalBody>:
                 <ModalBody overflow="scroll" justifyContent="center" px="3vw">
-                    <Input variant="flushed" size="lg" ref={recipeNameRef} isRequired={true} placeholder="Recipe Name"/>
+                    <Flex justifyContent="space-between" alignItems="center">
+                        <Input width="70%" variant="flushed" size="lg" ref={recipeNameRef} isRequired={true} placeholder="Recipe Name"/>
+                        <Flex width="20%" flexDirection="column">
+                            <Heading size="s" mb={2}>
+                                Serving size
+                            </Heading>
+                            <NumberInput min={0} allowMouseWheel>
+                                <NumberInputField ref={servingRef}/>
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper/>
+                                    <NumberDecrementStepper/>
+                                </NumberInputStepper>
+                            </NumberInput>
+                        </Flex>
+                    </Flex>
                     <Box mb="3vh">
                         {/* <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
                             Recipe Name
@@ -110,7 +181,14 @@ export default function CoverPage() {
                         <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
                             Ingredients
                         </Text>
-                        <Input ref={ingredientRef} placeholder="Ingredients" onKeyDown={addIngredient}/>
+                        <InputGroup>
+                            <Input ref={ingredientRef} placeholder="Ingredients" onKeyDown={addIngredient}/>
+                            <InputRightAddon
+                                padding={0}
+                                pointerEvents="cursor"
+                                children={<Button borderStartRadius="0" onClick={addIngredient} colorScheme="yellow">Add</Button>}
+                                />
+                        </InputGroup>
                         {ingredients && ingredients.length > 0 ? (
                             <List mt={4} spacing={3}>
                                 {ingredients.map((ingredients, index) => {
@@ -131,8 +209,15 @@ export default function CoverPage() {
                         <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
                             Tools
                         </Text>
-                        <Input placeholder="Tools" onKeyDown={addTool} ref={toolRef} />
-                        <Box mt={2}>
+                        <InputGroup>
+                            <Input placeholder="Tools" onKeyDown={addTool} ref={toolRef} />
+                            <InputRightAddon
+                                padding={0}
+                                pointerEvents="cursor"
+                                children={<Button borderStartRadius="0" colorScheme="yellow">Add</Button>}
+                                />
+                        </InputGroup>
+                        <Box mt={4}>
                             {tools.map((tool, index) => {
                                 return <Tag colorScheme="green" key={index} py={2} mr={2} cursor="pointer" onClick={() => removeTool(index)}>{tool}<CloseIcon ml={2} fontSize="0.5rem"/></Tag>
                             })}
@@ -144,7 +229,7 @@ export default function CoverPage() {
                         </Text>
                         <Flex flexDirection="column">
                             <InputGroup>
-                                <Input type="number"placeholder="Calories"/>
+                                <Input ref={caloriesRef} type="number"placeholder="Calories"/>
                                 <InputRightAddon
                                     width = "25%"
                                     justifyContent="center"
@@ -153,7 +238,7 @@ export default function CoverPage() {
                                 />
                             </InputGroup>
                             <InputGroup>
-                                <Input type="number"placeholder="Protein"/>
+                                <Input ref={proteinRef} type="number"placeholder="Protein"/>
                                 <InputRightAddon
                                     width = "25%"
                                     justifyContent="center"
@@ -162,7 +247,7 @@ export default function CoverPage() {
                                 />
                             </InputGroup>
                             <InputGroup>
-                                <Input type="number"placeholder="Carbohydrates"/>
+                                <Input ref={carbohydratesRef} type="number"placeholder="Carbohydrates"/>
                                 <InputRightAddon
                                     width = "25%"
                                     justifyContent="center"
@@ -171,7 +256,7 @@ export default function CoverPage() {
                                 />
                             </InputGroup>
                             <InputGroup>
-                                <Input type="number"placeholder="Fat"/>
+                                <Input ref={fatRef} type="number"placeholder="Fat"/>
                                 <InputRightAddon
                                     width = "25%"
                                     justifyContent="center"
@@ -180,7 +265,7 @@ export default function CoverPage() {
                                 />
                             </InputGroup>
                             <InputGroup>
-                                <Input type="number"placeholder="Cholesterol"/>
+                                <Input ref={cholesterolRef} type="number"placeholder="Cholesterol"/>
                                 <InputRightAddon
                                     width = "25%"
                                     justifyContent="center"
@@ -189,7 +274,7 @@ export default function CoverPage() {
                                 />
                             </InputGroup>
                             <InputGroup>
-                                <Input type="number"placeholder="Sodium"/>
+                                <Input ref={sodiumRef} type="number"placeholder="Sodium"/>
                                 <InputRightAddon
                                     width = "25%"
                                     justifyContent="center"
@@ -198,7 +283,7 @@ export default function CoverPage() {
                                 />
                             </InputGroup>
                             <InputGroup>
-                                <Input type="number"placeholder="Sugar"/>
+                                <Input ref={sugarRef} type="number"placeholder="Sugar"/>
                                 <InputRightAddon
                                     width = "25%"
                                     justifyContent="center"
@@ -207,7 +292,7 @@ export default function CoverPage() {
                                 />
                             </InputGroup>
                             <InputGroup>
-                                <Input type="number"placeholder="Fibre"/>
+                                <Input ref={fiberRef} type="number"placeholder="Fiber"/>
                                 <InputRightAddon
                                     width = "25%"
                                     justifyContent="center"
@@ -218,7 +303,7 @@ export default function CoverPage() {
                         </Flex>
                     </Box>
                     <Box mb="3vh">
-                        <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
+                        <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb={7}>
                             Instructions
                         </Text>
                         {instructions.map((instruction, index) => {
@@ -234,13 +319,12 @@ export default function CoverPage() {
                             <Tag borderRadius="full" colorScheme="gray" zIndex="99" position="absolute" top="0" left="0" transform="translateX(-50%) translateY(-50%)">{instructions.length + 1}</Tag>
                         </Box>
                     </Box>
-                </ModalBody>
-
+                </ModalBody>}
                 <ModalFooter>
                     <Button colorScheme="gray" mr={3} onClick={onClose}>
                     Close
                     </Button>
-                    <Button colorScheme="blue">Create</Button>
+                    <Button colorScheme="blue" onClick={createRecipe}>Create</Button>
                 </ModalFooter>
                 </ModalContent>
             </Modal>

@@ -49,6 +49,7 @@ public class RecipeController {
     }
 
     // get single recipe
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/recipe/{id}")
     public ResponseEntity getRecipe(@PathVariable Integer id) {
         try {
@@ -63,19 +64,11 @@ public class RecipeController {
         }
     }
 
-//    // create recipe
-//    @PostMapping("/recipe")
-//    public ResponseEntity createRecipe(@Valid @RequestBody Recipe recipe) {
-//        try {
-//            return new ResponseEntity<Recipe>(recipeRepository.save(recipe), HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<Error>(new Error (500, e.toString()), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/recipe")
     public ResponseEntity createRecipe (@RequestBody HashMap body) {
         try {
+            System.out.println(body);
             Recipe recipe = new Recipe();
 
             // add recipe to user

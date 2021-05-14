@@ -80,7 +80,9 @@ class Recipe extends Component {
 
         if (loading) {
             return (
-                <Loader/>
+                <Box className="body" display="flex" justifyContent="center" alignItems="center">
+                    <Loader/>
+                </Box>
             )
         }
 

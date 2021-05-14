@@ -25,7 +25,6 @@ public @Data class Ingredient {
     @JoinColumn(name = "recipe_id", insertable = false, updatable = false)
     private Recipe recipe;
 
-    @NotNull
     @Size(min=1, max=200, message = "Ingredient name length must be between 1 and 200!")
     private String ingredient_name;
 

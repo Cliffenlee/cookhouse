@@ -13,6 +13,7 @@ import React, { createRef, useState } from 'react'
 import Loader from '../common/Loader'
 import Error from '../common/Error'
 import {useDropzone} from 'react-dropzone'
+import {v4 as uuidv4} from 'uuid'
 
 export default function CoverPage() {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -23,6 +24,7 @@ export default function CoverPage() {
     const [tools, setTools] = useState([])
     const [instructions, setInstructions] = useState([])
     const [error, setError] = useState(false)
+    const [recipeImage, setRecipeImage] = useState(undefined)
 
     // ref
     const recipeNameRef = React.createRef()
@@ -38,23 +40,6 @@ export default function CoverPage() {
     const sugarRef = React.createRef()
     const fiberRef = React.createRef()
     const servingRef = React.createRef()
-
-    // upload image
-    const {
-        acceptedFiles,
-        fileRejections,
-        getRootProps,
-        getInputProps
-      } = useDropzone({
-        accept: 'image/jpeg, image/png',
-        maxFiles: 1
-      })
-
-    const acceptedFileItems = acceptedFiles.map(file => (
-    <ListItem key={file.path}>
-        {file.path} - {file.size} bytes
-    </ListItem>
-    ));
 
     function addTool (event) {
         if (event.key == 'Enter') {
@@ -112,9 +97,39 @@ export default function CoverPage() {
         ingredients == undefined || ingredients.length <= 0? setIngredients([]) : setIngredients(newIngredients)
     }
 
+
+    // upload image
+    // const {
+    //     acceptedFiles,
+    //     fileRejections,
+    //     getRootProps,
+    //     getInputProps
+    //   } = useDropzone({
+    //     accept: 'image/jpeg, image/png',
+    //     maxFiles: 1
+    //   })
+
+    // const acceptedFileItems = acceptedFiles.map(file => (
+    // <ListItem key={file.path}>
+    //     {file.path} - {file.size} bytes
+    // </ListItem>
+    // ));
+
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: 'image/jpeg, image/png',
+      //   disabled: typeof presignedUploadUrl !== 'string',
+        onDrop: handleDrop,
+      });
+
+    function handleDrop([pendingImage]) {
+        setRecipeImage(pendingImage)
+    }
+
+
+
     async function createRecipe () {
-        console.log("im being executed")
         setIsLoading(true)
+        const uuid = recipeImage ? uuidv4() : undefined
         try {
             const requestBody = {
                 user_id: 1,
@@ -140,9 +155,33 @@ export default function CoverPage() {
                     return {tool_name: tool}
                 })
             }
-            console.log(requestBody)
-            let response = await axios.post("http://localhost:8080/recipe", requestBody)
-            console.log(response)
+
+            // create recipe in db
+            const dataResponse = await axios.post("http://localhost:8080/recipe", requestBody)
+            console.log(dataResponse)
+
+            // get presigned url for s3
+            const presignedRequestBody = {
+                "bucket_name": "1",
+                "object_name": uuid
+            }
+
+            // const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev", presignedRequestBody)
+            // const imageResponse = await fetch(
+            //     new Request(presignedUploadUrl, {
+            //       method: 'POST',
+            //       body: pendingImage,
+            //       headers: new Headers({
+            //         'Content-Type': 'image/*',
+            //       }),
+            //     }),
+            //   );
+            // if (imageResponse.status !== 200) {
+            // // The upload failed, so let's notify the caller.
+            // setError(true)
+            // // error toast
+            // }
+
         } catch (responseError) {
             console.log(responseError)
             setError(true)
@@ -328,8 +367,8 @@ export default function CoverPage() {
                                     <Text fontSize="lg" color="gray.400" lineHeight="1.2" mb={2}>Drop your image here</Text>
                                     <Text fontSize="xs" color="gray.400" lineHeight="1.2">(Only jpg and png images will be accepted)</Text>
                             </Flex>
-                            <Text fontSize="md">Accepted files</Text>
-                            <List>{acceptedFileItems}</List>
+                            {/* <Text fontSize="md">Accepted files</Text>
+                            <List>{acceptedFileItems}</List> */}
                         </Box>
                     </Flex>
                     <Box mb="3vh">

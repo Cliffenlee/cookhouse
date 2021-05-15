@@ -131,57 +131,64 @@ export default function CoverPage() {
         setIsLoading(true)
         const uuid = recipeImage ? uuidv4() : undefined
         try {
-            const requestBody = {
-                user_id: 1,
-                serving: parseInt(servingRef.current.value),
-                name: recipeNameRef.current.value,
-                nutrition: {
-                    calories: parseInt(caloriesRef.current.value),
-                    protein: parseInt(proteinRef.current.value),
-                    carbohydrates: parseInt(carbohydratesRef.current.value),
-                    fat: parseInt(fatRef.current.value),
-                    cholesterol: parseInt(cholesterolRef.current.value),
-                    sodium: parseInt(sodiumRef.current.value),
-                    sugar: parseInt(sugarRef.current.value),
-                    fiber: parseInt(fiberRef.current.value)
-                },
-                ingredients: ingredients.map(ingredient => {
-                    return {ingredient_name: null, description: ingredient}
-                }),
-                instructions: instructions.map((instruction, index) => {
-                    return {step: index+1, instruction: instruction}
-                }),
-                tools: tools.map(tool => {
-                    return {tool_name: tool}
-                })
-            }
+            // const requestBody = {
+            //     user_id: 1,
+            //     serving: parseInt(servingRef.current.value),
+            //     name: recipeNameRef.current.value,
+            //     image_name: uuid,
+            //     nutrition: {
+            //         calories: parseInt(caloriesRef.current.value),
+            //         protein: parseInt(proteinRef.current.value),
+            //         carbohydrates: parseInt(carbohydratesRef.current.value),
+            //         fat: parseInt(fatRef.current.value),
+            //         cholesterol: parseInt(cholesterolRef.current.value),
+            //         sodium: parseInt(sodiumRef.current.value),
+            //         sugar: parseInt(sugarRef.current.value),
+            //         fiber: parseInt(fiberRef.current.value)
+            //     },
+            //     ingredients: ingredients.map(ingredient => {
+            //         return {ingredient_name: null, description: ingredient}
+            //     }),
+            //     instructions: instructions.map((instruction, index) => {
+            //         return {step: index+1, instruction: instruction}
+            //     }),
+            //     tools: tools.map(tool => {
+            //         return {tool_name: tool}
+            //     })
+            // }
 
-            // create recipe in db
-            const dataResponse = await axios.post("http://localhost:8080/recipe", requestBody)
-            console.log(dataResponse)
+            // // create recipe in db
+            // const dataResponse = await axios.post("http://localhost:8080/recipe", requestBody)
+            // console.log(dataResponse)
 
             // get presigned url for s3
             const presignedRequestBody = {
-                "bucket_name": "1",
-                "object_name": uuid
+                "bucket_name": "cookhouse_images",
+                "object_name": `1/${uuid}`
             }
 
-            // const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev", presignedRequestBody)
-            // const imageResponse = await fetch(
-            //     new Request(presignedUploadUrl, {
-            //       method: 'POST',
-            //       body: pendingImage,
-            //       headers: new Headers({
-            //         'Content-Type': 'image/*',
-            //       }),
-            //     }),
-            //   );
-            // if (imageResponse.status !== 200) {
-            // // The upload failed, so let's notify the caller.
-            // setError(true)
-            // // error toast
-            // }
+            const presignedRequestHeader = {
+                'Content-Type': 'application/json'
+              }
 
+            console.log("uploading...")
+            const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev/", presignedRequestBody, presignedRequestHeader)
+            console.log(presignedUploadUrl)
+            console.log(presignedUploadUrl.data.url)
+            const uploadHeaders = {
+                'Content-Type': 'image/*',
+
+            }
+            const uploadResponse = await axios.post(presignedUploadUrl.data.url, {recipeImage}, uploadHeaders)
+            if (uploadResponse.status !== 200) {
+            // The upload failed, so let's notify the caller.
+            console.log("failed")
+            setError(true)
+            // error toast
+            } else {
+                console.log("success!")
+            }
+            console.log(uploadResponse)
         } catch (responseError) {
             console.log(responseError)
             setError(true)

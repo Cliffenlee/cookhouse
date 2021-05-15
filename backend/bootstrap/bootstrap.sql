@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS recipe (
   	user_id int NOT NULL,
 	name VARCHAR(40) NOT NULL,
 	serving int NOT NULL,
-	image_name VARCHAR(40),
+	image_name VARCHAR(100),
   	PRIMARY KEY (id),
   	FOREIGN KEY (user_id) REFERENCES users(id)
 );

@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/layout'
 import React, { useState } from 'react'
-import Recipe from '../components/Recipe/recipe'
+import Recipe from '../components/Recipe/Recipe'
 
 export default function recipe() {
     const [recipes, setRecipes] = useState([

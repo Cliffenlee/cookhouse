@@ -163,7 +163,7 @@ export default function CoverPage() {
 
             // get presigned url for s3
             const presignedRequestBody = {
-                bucket: "cookhouse_images",
+                bucket: "cookhouse-images",
                 key: `1/${uuid}`
             }
 

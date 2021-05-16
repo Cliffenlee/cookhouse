@@ -33,7 +33,7 @@ public class RecipeController {
     private Gson gson = new Gson();
 
     // get all recipes
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = {"http://localhost:3000", "https://cook-house.netlify.app"})
     @GetMapping("/recipes")
     public ResponseEntity getAllRecipes() {
         try {
@@ -49,7 +49,7 @@ public class RecipeController {
     }
 
     // get single recipe
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = {"http://localhost:3000", "https://cook-house.netlify.app"})
     @GetMapping("/recipe/{id}")
     public ResponseEntity getRecipe(@PathVariable Integer id) {
         try {
@@ -64,7 +64,7 @@ public class RecipeController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = {"http://localhost:3000", "https://cook-house.netlify.app"})
     @PostMapping("/recipe")
     public ResponseEntity createRecipe (@RequestBody HashMap body) {
         try {

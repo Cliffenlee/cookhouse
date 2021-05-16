@@ -1,8 +1,9 @@
 import '../styles/globals.css'
 import Head from 'next/head'
-import { ChakraProvider } from '@chakra-ui/react'
+import { Box, ChakraProvider } from '@chakra-ui/react'
 import NavBarLanding from '../components/NavBar/NavBarLanding'
 import NavBar from '../components/NavBar/NavBar'
+import Background from '../components/common/Background'
 
 
 function MyApp({ Component, pageProps }) {
@@ -13,8 +14,9 @@ function MyApp({ Component, pageProps }) {
         <title>Cookhouse</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      {nav}
-      <Component {...pageProps} />
+        {nav}
+        <Background/>
+        <Component {...pageProps} />
     </ChakraProvider>
   )
 

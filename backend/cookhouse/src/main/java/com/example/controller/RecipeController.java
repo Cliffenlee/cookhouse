@@ -74,6 +74,7 @@ public class RecipeController {
             // add recipe to user
             recipe.setServing((Integer)body.get("serving"));
             recipe.setName((String)body.get("name"));
+            recipe.setImage_name((String)body.get("image_name"));
             Optional<User> user = userRepository.findById((Integer) body.get("user_id"));
 
             if (!user.isPresent()) {

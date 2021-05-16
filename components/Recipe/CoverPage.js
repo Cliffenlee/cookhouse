@@ -135,12 +135,14 @@ export default function CoverPage() {
     async function createRecipe () {
         setIsLoading(true)
         const uuid = recipeImage ? uuidv4() : undefined
+        console.log(uuid)
+
         try {
             const requestBody = {
                 user_id: 1,
                 serving: parseInt(servingRef.current.value),
                 name: recipeNameRef.current.value,
-                image_name: uuid,
+                image_name: uuid.toString(),
                 nutrition: {
                     calories: parseInt(caloriesRef.current.value),
                     protein: parseInt(proteinRef.current.value),

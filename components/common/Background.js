@@ -1,8 +1,11 @@
 import { Image } from '@chakra-ui/image'
+import { Box } from '@chakra-ui/layout'
 import React from 'react'
 
 export default function Background() {
     return (
-        <Image zIndex="-1" position="fixed" top="0" left="0" src="/assets/kitchen.jpg" width="100vw"/>
+        <Box position="relative">
+            <Image zIndex="-1" position="absolute" top="0" src="/assets/chopping.jpg" width="100vw" />
+        </Box>
     )
 }

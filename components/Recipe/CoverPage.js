@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/button'
 import { useDisclosure } from '@chakra-ui/hooks'
-import { AddIcon, CheckCircleIcon, CloseIcon, EditIcon, SmallCloseIcon } from '@chakra-ui/icons'
+import { AddIcon, CheckCircleIcon, CloseIcon, DeleteIcon, EditIcon, SmallCloseIcon } from '@chakra-ui/icons'
 import { Input, InputGroup, InputRightAddon, InputRightElement } from '@chakra-ui/input'
 import { Box, Flex, Heading, List, ListIcon, ListItem, Text } from '@chakra-ui/layout'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
@@ -25,6 +25,7 @@ export default function CoverPage() {
     const [instructions, setInstructions] = useState([])
     const [error, setError] = useState(false)
     const [recipeImage, setRecipeImage] = useState(undefined)
+    const [imagePreview, setImagePreview] = useState(undefined)
 
     // ref
     const recipeNameRef = React.createRef()
@@ -122,98 +123,91 @@ export default function CoverPage() {
       });
 
     function handleDrop([pendingImage]) {
+        setImagePreview(URL.createObjectURL(pendingImage))
         setRecipeImage(pendingImage)
     }
 
-
+    function removeImage() {
+        setImagePreview(undefined)
+        setRecipeImage(undefined)
+    }
 
     async function createRecipe () {
         setIsLoading(true)
         const uuid = recipeImage ? uuidv4() : undefined
         try {
-            // const requestBody = {
-            //     user_id: 1,
-            //     serving: parseInt(servingRef.current.value),
-            //     name: recipeNameRef.current.value,
-            //     image_name: uuid,
-            //     nutrition: {
-            //         calories: parseInt(caloriesRef.current.value),
-            //         protein: parseInt(proteinRef.current.value),
-            //         carbohydrates: parseInt(carbohydratesRef.current.value),
-            //         fat: parseInt(fatRef.current.value),
-            //         cholesterol: parseInt(cholesterolRef.current.value),
-            //         sodium: parseInt(sodiumRef.current.value),
-            //         sugar: parseInt(sugarRef.current.value),
-            //         fiber: parseInt(fiberRef.current.value)
-            //     },
-            //     ingredients: ingredients.map(ingredient => {
-            //         return {ingredient_name: null, description: ingredient}
-            //     }),
-            //     instructions: instructions.map((instruction, index) => {
-            //         return {step: index+1, instruction: instruction}
-            //     }),
-            //     tools: tools.map(tool => {
-            //         return {tool_name: tool}
-            //     })
-            // }
+            const requestBody = {
+                user_id: 1,
+                serving: parseInt(servingRef.current.value),
+                name: recipeNameRef.current.value,
+                image_name: uuid,
+                nutrition: {
+                    calories: parseInt(caloriesRef.current.value),
+                    protein: parseInt(proteinRef.current.value),
+                    carbohydrates: parseInt(carbohydratesRef.current.value),
+                    fat: parseInt(fatRef.current.value),
+                    cholesterol: parseInt(cholesterolRef.current.value),
+                    sodium: parseInt(sodiumRef.current.value),
+                    sugar: parseInt(sugarRef.current.value),
+                    fiber: parseInt(fiberRef.current.value)
+                },
+                ingredients: ingredients.map(ingredient => {
+                    return {ingredient_name: null, description: ingredient}
+                }),
+                instructions: instructions.map((instruction, index) => {
+                    return {step: index+1, instruction: instruction}
+                }),
+                tools: tools.map(tool => {
+                    return {tool_name: tool}
+                })
+            }
 
             // // create recipe in db
-            // const dataResponse = await axios.post("http://localhost:8080/recipe", requestBody)
-            // console.log(dataResponse)
+            const dataResponse = await axios.post("http://localhost:8080/recipe", requestBody)
+            console.log(dataResponse)
 
-            // get presigned url for s3
-            const presignedRequestBody = {
-                bucket: "cookhouse-images",
-                key: `1/${uuid}`
-            }
-
-            const presignedRequestHeader = {
-                'Content-Type': 'application/json'
-              }
-
-            console.log("uploading...")
-            const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev/uploadurljs", presignedRequestBody, presignedRequestHeader)
-            console.log(presignedUploadUrl)
-            // console.log(presignedUploadUrl.data.url)
-            const data = {
-                bucket: "cookhouse-images",
-                ...presignedUploadUrl.data.data.fields,
-                'Content-Type': recipeImage.type,
-                file: recipeImage
-            }
-            var formData = new FormData()
-            for (const name in data) {
-                formData.append(name, data[name])
-            }
-            console.log(formData)
-            // const uploadHeaders = {
-            //     'Content-Type': 'multipart/form-data',
-            //     'Accept': 'application/json'
-            // }
-            // const uploadResponse = await axios.post(presignedUploadUrl.data.url.url, uploadBody, uploadHeaders)
-            // if (uploadResponse.status !== 200) {
-            // // The upload failed, so let's notify the caller.
-            // console.log("failed")
-            // setError(true)
-            // // error toast
-            // } else {
-            //     console.log("success!")
-            // }
-
-            const uploadResponse = await fetch(presignedUploadUrl.data.data.url, {
-                method: 'POST',
-                body: formData
-              }).then((res) => {
-                if (!res.ok) {
-                    console.log(res)
-                    console.log("error")
-                  throw new Error(res.statusText);
+            if (recipeImage) {
+                // get presigned url for s3
+                const presignedRequestBody = {
+                    bucket: "cookhouse-images",
+                    key: `1/${uuid}`
                 }
-                console.log(res)
-                console.log("success!")
-              });
-            console.log(uploadResponse)
 
+                const presignedRequestHeader = {
+                    'Content-Type': 'application/json'
+                }
+
+                console.log("uploading...")
+                const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev/uploadurljs", presignedRequestBody, presignedRequestHeader)
+                console.log(presignedUploadUrl)
+                // console.log(presignedUploadUrl.data.url)
+                const data = {
+                    bucket: "cookhouse-images",
+                    ...presignedUploadUrl.data.data.fields,
+                    'Content-Type': recipeImage.type,
+                    file: recipeImage
+                }
+                var formData = new FormData()
+                for (const name in data) {
+                    formData.append(name, data[name])
+                }
+
+                const uploadResponse = await fetch(presignedUploadUrl.data.data.url, {
+                    method: 'POST',
+                    body: formData
+                }).then((res) => {
+                    if (!res.ok) {
+                        console.log(res)
+                        console.log("error")
+                        // show error toast
+                    throw new Error(res.statusText);
+                    } else {
+                        console.log(res)
+                        console.log("success!")
+                    }
+                });
+                console.log(uploadResponse)
+            }
 
         } catch (responseError) {
             console.log(responseError)
@@ -392,16 +386,21 @@ export default function CoverPage() {
                             </Flex>
                         </Box>
                         <Box width="50%" p={0}>
-                            <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
-                                Recipe image
-                            </Text>
-                            <Flex mb={4} flexDirection="column" justifyContent="center" alignItems="center" cursor="pointer" textAlign="center" borderWidth="2px" height="50%" borderStyle="dotted" p={8} {...getRootProps({ className: 'dropzone' })}>
-                                <input {...getInputProps()} />
+                            <Flex>
+                                <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
+                                    Recipe image
+                                </Text>
+                                {imagePreview ? <DeleteIcon textAlign="start" cursor="pointer" ml={2} color="red.400" onClick={removeImage}/> : ""}
+                            </Flex>
+                            <Flex mb={4} position="relative" flexDirection="column" justifyContent="center" alignItems="center" cursor="pointer" textAlign="center" borderWidth="2px" height="50%" borderStyle="dotted" p={8} {...getRootProps({ className: 'dropzone' })}>
+                                {imagePreview ? <Image position="absolute" width="100%" left="0" top="50%" transform="translateY(-50%)" src={imagePreview} /> : ""
+                                }
+                                {/* <Box position="absolute" left="0" top="0"> */}
+                                    <input {...getInputProps()} />
                                     <Text fontSize="lg" color="gray.400" lineHeight="1.2" mb={2}>Drop your image here</Text>
                                     <Text fontSize="xs" color="gray.400" lineHeight="1.2">(Only jpg and png images will be accepted)</Text>
+                                {/* </Box> */}
                             </Flex>
-                            {/* <Text fontSize="md">Accepted files</Text>
-                            <List>{acceptedFileItems}</List> */}
                         </Box>
                     </Flex>
                     <Box mb="3vh">

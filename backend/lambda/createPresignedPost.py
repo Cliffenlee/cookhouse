@@ -1,11 +1,13 @@
 import logging
 import boto3
+import json
 from botocore.exceptions import ClientError
 
 
 def lambda_handler(event, context):
-    bucket_name = event["bucket_name"]
-    object_name = event["object_name"]
+    print(event)
+    bucket_name = json.loads(event["body"])["bucket_name"]
+    object_name = json.loads(event["body"])["object_name"]
     fields=None
     conditions=None
     expiration=3600
@@ -24,15 +26,26 @@ def lambda_handler(event, context):
 
     # Generate a presigned S3 POST URL
     s3_client = boto3.client('s3')
+    statusCode = 200
+    result = {}
     try:
-        response = s3_client.generate_presigned_post(bucket_name,
-                                                     object_name,
-                                                     Fields=fields,
-                                                     Conditions=conditions,
-                                                     ExpiresIn=expiration)
+        response = s3_client.generate_presigned_url('put_object',Params={"Bucket": bucket_name,"Key": object_name},ExpiresIn=3600)
+        result['status'] = "success"
+        result['url'] =  response
     except ClientError as e:
-        logging.error(e)
+        statusCode = 400
+        result['status'] = 'error'
+        result['error'] = str(e)
+        print(e)
         return None
-
+    print(response)
     # The response contains the presigned URL and required fields
-    return response
+    return {
+        "statusCode": statusCode,
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin" : "*"
+        },
+        "body": json.dumps(result)
+    }
+    

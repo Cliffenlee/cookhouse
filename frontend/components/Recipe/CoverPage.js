@@ -163,8 +163,8 @@ export default function CoverPage() {
 
             // get presigned url for s3
             const presignedRequestBody = {
-                "bucket_name": "cookhouse_images",
-                "object_name": `1/${uuid}`
+                bucket: "cookhouse_images",
+                key: `1/${uuid}`
             }
 
             const presignedRequestHeader = {
@@ -172,23 +172,49 @@ export default function CoverPage() {
               }
 
             console.log("uploading...")
-            const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev/", presignedRequestBody, presignedRequestHeader)
+            const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev/uploadurljs", presignedRequestBody, presignedRequestHeader)
             console.log(presignedUploadUrl)
-            console.log(presignedUploadUrl.data.url)
-            const uploadHeaders = {
-                'Content-Type': 'image/*',
+            // console.log(presignedUploadUrl.data.url)
+            const data = {
+                bucket: "cookhouse-images",
+                ...presignedUploadUrl.data.data.fields,
+                'Content-Type': recipeImage.type,
+                file: recipeImage
+            }
+            var formData = new FormData()
+            for (const name in data) {
+                formData.append(name, data[name])
+            }
+            console.log(formData)
+            // const uploadHeaders = {
+            //     'Content-Type': 'multipart/form-data',
+            //     'Accept': 'application/json'
+            // }
+            // const uploadResponse = await axios.post(presignedUploadUrl.data.url.url, uploadBody, uploadHeaders)
+            // if (uploadResponse.status !== 200) {
+            // // The upload failed, so let's notify the caller.
+            // console.log("failed")
+            // setError(true)
+            // // error toast
+            // } else {
+            //     console.log("success!")
+            // }
 
-            }
-            const uploadResponse = await axios.post(presignedUploadUrl.data.url, {recipeImage}, uploadHeaders)
-            if (uploadResponse.status !== 200) {
-            // The upload failed, so let's notify the caller.
-            console.log("failed")
-            setError(true)
-            // error toast
-            } else {
+            const uploadResponse = await fetch(presignedUploadUrl.data.data.url, {
+                method: 'POST',
+                body: formData
+              }).then((res) => {
+                if (!res.ok) {
+                    console.log(res)
+                    console.log("error")
+                  throw new Error(res.statusText);
+                }
+                console.log(res)
                 console.log("success!")
-            }
+              });
             console.log(uploadResponse)
+
+
         } catch (responseError) {
             console.log(responseError)
             setError(true)

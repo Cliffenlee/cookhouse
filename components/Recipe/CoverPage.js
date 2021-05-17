@@ -14,6 +14,7 @@ import Loader from '../common/Loader'
 import Error from '../common/Error'
 import {useDropzone} from 'react-dropzone'
 import {v4 as uuidv4} from 'uuid'
+import InstructionEdit from './InstructionEdit'
 
 export default function CoverPage() {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -26,6 +27,8 @@ export default function CoverPage() {
     const [error, setError] = useState(false)
     const [recipeImage, setRecipeImage] = useState(undefined)
     const [imagePreview, setImagePreview] = useState(undefined)
+    const [instructionEditIndex, setInstructionEditIndex] = useState(undefined)
+    const [prevInstruction, setPrevInstruction] = useState(undefined)
 
     // ref
     const recipeNameRef = React.createRef()
@@ -75,6 +78,29 @@ export default function CoverPage() {
         }
     }
 
+    function confirmEditInstruction(event) {
+        if (event.key == 'Enter') {
+            event.preventDefault()
+            const newInstruction = event.target.value.trim()
+            let oldInstructions = instructions
+            oldInstructions.splice(instructionEditIndex-1, 1, newInstruction)
+            setInstructions(oldInstructions)
+            instructionRef.current.value = ""
+            setInstructionEditIndex(undefined)
+            setPrevInstruction(undefined)
+        }
+    }
+
+    function confirmEditOnBlur(event) {
+        const newInstruction = event.target.value.trim()
+        let oldInstructions = instructions
+        oldInstructions.splice(instructionEditIndex-1, 1, newInstruction)
+        setInstructions(oldInstructions)
+        instructionRef.current.value = ""
+        setInstructionEditIndex(undefined)
+        setPrevInstruction(undefined)
+    }
+
     function removeInstruction (index) {
         const newInstructions = [...instructions]
         index !== -1 ? newInstructions.splice(index,1) : ""
@@ -98,24 +124,6 @@ export default function CoverPage() {
         ingredients == undefined || ingredients.length <= 0? setIngredients([]) : setIngredients(newIngredients)
     }
 
-
-    // upload image
-    // const {
-    //     acceptedFiles,
-    //     fileRejections,
-    //     getRootProps,
-    //     getInputProps
-    //   } = useDropzone({
-    //     accept: 'image/jpeg, image/png',
-    //     maxFiles: 1
-    //   })
-
-    // const acceptedFileItems = acceptedFiles.map(file => (
-    // <ListItem key={file.path}>
-    //     {file.path} - {file.size} bytes
-    // </ListItem>
-    // ));
-
     const { getRootProps, getInputProps } = useDropzone({
         accept: 'image/jpeg, image/png',
       //   disabled: typeof presignedUploadUrl !== 'string',
@@ -130,6 +138,14 @@ export default function CoverPage() {
     function removeImage() {
         setImagePreview(undefined)
         setRecipeImage(undefined)
+    }
+
+    function editInstruction(event, instruction, index) {
+        console.log(index)
+        event.preventDefault()
+        setInstructionEditIndex(index+1)
+        setPrevInstruction(instruction)
+
     }
 
     async function createRecipe () {
@@ -410,8 +426,15 @@ export default function CoverPage() {
                             Instructions
                         </Text>
                         {instructions.map((instruction, index) => {
+                            console.log(index, instructionEditIndex ? instructionEditIndex : "")
+                            if (instructionEditIndex && instructionEditIndex-1 == index) {
+                                return (
+                                    <InstructionEdit key={index} confirmEditOnBlur={confirmEditOnBlur} confirmEditInstruction={confirmEditInstruction} index={index} prevInstruction={prevInstruction}/>
+                                )
+                            }
+
                             return(
-                                <Box key={index} position="relative" width="100%" minHeight="8vh" mb={4} borderRadius={10} padding={4} background="blue.100">
+                                <Box onDoubleClick={(event) => editInstruction(event, instruction, index)} key={index} position="relative" width="100%" minHeight="8vh" mb={4} borderRadius={10} padding={4} background="blue.100">
                                     <Tag borderRadius="full" colorScheme="gray" zIndex="99" position="absolute" top="0" left="0" transform="translateX(-50%) translateY(-50%)">{index+1}</Tag>
                                     <Box zIndex="99" position="absolute" top="0" right={2}><CloseIcon fontSize="0.6rem" cursor="pointer" onClick={() => {removeInstruction(index)}}/></Box>
                                     {instruction}

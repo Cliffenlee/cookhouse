@@ -29,7 +29,7 @@ export default function NavBarLanding() {
             <HamburgerIcon onClick={onOpen} fontSize="2rem" style={{cursor:"pointer"}}/>
             <Logo />
             <Flex className="nav-links">
-                <NavBarLink name="MY RECIPES" link="/myRecipes" />
+                <NavBarLink name="MY RECIPES" link="/recipes" />
                 <NavBarLink name="PROFILE" link="/profile" />
                 <NavBarLink name="LOG IN" link="/login" />
             </Flex>

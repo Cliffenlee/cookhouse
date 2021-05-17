@@ -10,6 +10,10 @@ export default function login() {
         Router.push('/')
     }
 
+    function index() {
+        Router.push('/')
+    }
+
     return (
         <Box overflow="hidden">
             <Flex height="100vh" width="100%" justifyContent="center" alignItems="center" background="#707773">
@@ -19,7 +23,7 @@ export default function login() {
                         <Image src="/assets/login2.jpg" minWidth="100%" minHeight="100%" borderStartRadius="15px"/>
                     </Flex>
                     <Flex position="relative" flexDirection="column" alignItems="center" width="50%" height="100%" background="white" borderEndRadius="15px">
-                        <Heading position="absolute" top="15%" left="50%" transform="translateX(-50%)"size="2xl" fontFamily="Artbrush" fontWeight="400">
+                        <Heading cursor="pointer" onClick={index} position="absolute" top="15%" left="50%" transform="translateX(-50%)"size="2xl" fontFamily="Artbrush" fontWeight="400">
                             Cookhouse
                         </Heading>
                         <Heading size="md" mt="25vh" mb={20}>

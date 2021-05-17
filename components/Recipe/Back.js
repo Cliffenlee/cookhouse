@@ -7,7 +7,7 @@ export default function Back({toHomePage, recipe, selector}) {
     const bookmark = selector == "c0" ? <div onClick={toHomePage} className="bookmark-back">Return to front</div> : ""
     return (
         <Box className="back">
-            <Image height="50%" src={imageLink} alt={recipe.name}></Image>
+            <Image height="50%" maxWidth="100%" src={imageLink} alt={recipe.name}></Image>
             <Flex height="50%" p={8} flexDirection="column" alignItems="start">
                 <Flex height="80%" flexDirection="column">
                     <Heading width="100%" px={4} textAlign="start" mb={4}>

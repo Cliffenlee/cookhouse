@@ -4,10 +4,11 @@ import { Box, ChakraProvider } from '@chakra-ui/react'
 import NavBarLanding from '../components/NavBar/NavBarLanding'
 import NavBar from '../components/NavBar/NavBar'
 import Background from '../components/common/Background'
+import NavBarHome from '../components/NavBar/NavBarHome'
 
 
 function MyApp({ Component, pageProps }) {
-  const nav = Component.name == "landing" ? <NavBarLanding/>  : <NavBar/>
+  const nav = Component.name == "landing" ? <NavBarLanding/> : Component.name == "home" ? <NavBarHome/> : <NavBar/>
   return (
     <ChakraProvider>
       <Head>

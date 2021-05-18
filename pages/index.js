@@ -1,5 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react"
-import Background from "../components/common/Background"
+import { Box } from "@chakra-ui/react"
 
 export default function landing() {
   return (

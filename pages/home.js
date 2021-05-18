@@ -55,9 +55,8 @@ export default class home extends Component {
 
         return (
             <Box>
-                <Flex height="100vh" width="100%" justifyContent="center" alignItems="center">
-            </Flex>
-        </Box>
+                <div className="home-shadow"/>
+            </Box>
         )
     }
 }

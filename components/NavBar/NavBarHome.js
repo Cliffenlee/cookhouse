@@ -4,14 +4,14 @@ import {HamburgerIcon} from '@chakra-ui/icons'
 import NavBarLink from './NavBarLink'
 import Logo from './Logo'
 
-export default function NavBar() {
+export default function NavBarHome() {
     //FBDAC9 darker bg
     //FDF0E2 lighter bg
     //FE9071 icon orange
     //FE9477 word orange
     const {isOpen, onOpen, onClose} = useDisclosure()
     return (
-        <Flex className="nav-bar">
+        <Flex className="nav-bar-landing">
             <Drawer placement="left" onClose={onClose} isOpen={isOpen} >
                 <DrawerOverlay/>
                 <DrawerContent>

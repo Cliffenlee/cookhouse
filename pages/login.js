@@ -7,7 +7,7 @@ import React from 'react'
 
 export default function login() {
     function userLogin() {
-        Router.push('/')
+        Router.push('/home')
     }
 
     function index() {
@@ -37,7 +37,7 @@ export default function login() {
                             <Text fontSize="xs" fontWeight="500">
                                 Password
                             </Text>
-                            <Input variant="flushed" placeholder="Password" mb={2}/>
+                            <Input variant="flushed" placeholder="Password" type="password" mb={2}/>
                             <Text textAlign="end" cursor="pointer" _hover={{textDecoration: "underline"}} fontSize="xs" color="blue.300">
                                 Forgot password?
                             </Text>

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Box, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, useDisclosure } from '@chakra-ui/react'
+import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, useDisclosure } from '@chakra-ui/react'
 import {HamburgerIcon} from '@chakra-ui/icons'
 import NavBarLink from './NavBarLink'
-import Logo from './Logo'
+import LandingLogo from './LandingLogo'
 
 export default function NavBarLanding() {
     //FBDAC9 darker bg
@@ -27,10 +27,8 @@ export default function NavBarLanding() {
                 </DrawerContent>
             </Drawer>
             <HamburgerIcon onClick={onOpen} fontSize="2rem" style={{cursor:"pointer"}}/>
-            <Logo />
+            <LandingLogo />
             <Flex className="nav-links">
-                <NavBarLink name="MY RECIPES" link="/recipes" />
-                <NavBarLink name="PROFILE" link="/profile" />
                 <NavBarLink name="LOG IN" link="/login" />
             </Flex>
         </Flex>

@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function DefaultPicture() {
     return (
-        <Box cursor="pointer" className="default-picture-wrapper" position="relative" height="50%" maxWidth="100%" overflow="hidden" outline="3px dotted gray">
+        <Box cursor="pointer" className="default-picture-wrapper" position="relative" height="50%" maxWidth="100%" overflow="hidden">
             <Box>
                 <Image className="default-picture" maxHeight="100%" maxWidth="100%" src="/assets/login.jpg" opacity="0.6" />
             </Box>

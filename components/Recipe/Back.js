@@ -3,8 +3,11 @@ import {Box, Flex, Heading, Image, ListItem, Tag, Text, UnorderedList} from '@ch
 import { ArrowBackIcon } from '@chakra-ui/icons'
 
 export default function Back({toHomePage, recipe, selector}) {
-    const imageLink = `https://cookhouse-images.s3-ap-southeast-1.amazonaws.com/${recipe.user_id}/${recipe.image_name}`
+    const imageLink = `https://cookhouse-images.s3-ap-southeast-1.amazonaws.com/${recipe.image_name}`
     const bookmark = selector == "c0" ? <div onClick={toHomePage} className="bookmark-back">Return to front</div> : ""
+    recipe.tools.sort(function(a,b) {return a.tool_name > b.tool_name})
+    recipe.ingredients.sort(function(a,b) {return a.description > b.description})
+
     return (
         <Box className="back">
             <Image height="50%" maxWidth="100%" src={imageLink} alt={recipe.name}></Image>

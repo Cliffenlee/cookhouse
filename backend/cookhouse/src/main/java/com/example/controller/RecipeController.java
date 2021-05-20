@@ -144,4 +144,79 @@ public class RecipeController {
         }
     }
 
+    @CrossOrigin(origins = {"http://localhost:3000", "https://cook-house.netlify.app"})
+    @PutMapping("/recipe")
+    public ResponseEntity editRecipe (@RequestBody HashMap body) {
+        try {
+            System.out.println(body);
+            Optional<Recipe> optionalRecipe = recipeRepository.findById((Integer) body.get("recipe_id"));
+
+            if (!optionalRecipe.isPresent()) {
+                return new ResponseEntity<Error>(new Error(404, "recipe id not found: " + body.get("recipe_id")), HttpStatus.NOT_FOUND);
+            }
+
+            Recipe recipe = optionalRecipe.get();
+
+            // edit recipe attributes
+            recipe.setServing((Integer)body.get("serving"));
+            recipe.setName((String)body.get("name"));
+            recipe.setImage_name((String)body.get("image_name"));
+
+
+            // edit nutrition
+            if (body.get("nutrition") != null) {
+                JsonElement jsonElement = gson.toJsonTree(body.get("nutrition"));
+                Nutrition nutrition = gson.fromJson(jsonElement, Nutrition.class);
+                nutrition.setRecipe(recipe);
+                recipe.setNutrition(nutrition);
+                nutritionRepository.save(nutrition);
+            }
+            
+            // delete all tools, ingredients and instructions from recipe
+            recipe.getTools().clear();
+            recipe.getIngredients().clear();
+            recipe.getInstructions().clear();
+            System.out.println("after clearing tools, ingredients and instructions");
+            System.out.println(recipe);
+
+            // add ingredients to recipe
+            List<Object> ingredientList = (List<Object>) body.get("ingredients") == null ? new ArrayList<Object>() : (List<Object>) body.get("ingredients");
+
+            for (Object object: ingredientList) {
+                JsonElement ingredientElement = gson.toJsonTree(object);
+                Ingredient ingredient = gson.fromJson(ingredientElement, Ingredient.class);
+                ingredient.setRecipe_id(recipe.getId());
+                recipe.getIngredients().add(ingredient);
+                ingredientRepository.save(ingredient);
+            }
+
+            // add instructions to recipe
+            List<Object> instructionList = (List<Object>) body.get("instructions") == null ? new ArrayList<Object>() : (List<Object>) body.get("instructions");;
+
+            for (Object object: instructionList) {
+                JsonElement instructionElement = gson.toJsonTree(object);
+                Instruction instruction = gson.fromJson(instructionElement, Instruction.class);
+                instruction.setRecipe_id(recipe.getId());
+                recipe.getInstructions().add(instruction);
+                instructionRepository.save(instruction);
+            }
+
+            // add tools to recipe
+            List<Object> toolList = (List<Object>) body.get("tools") == null ? new ArrayList<Object>() : (List<Object>) body.get("tools");
+
+            for (Object object: toolList) {
+                JsonElement toolElement = gson.toJsonTree(object);
+                Tool tool = gson.fromJson(toolElement, Tool.class);
+                tool.setRecipe_id(recipe.getId());
+                recipe.getTools().add(tool);
+                toolRepository.save(tool);
+            }
+            
+            return new ResponseEntity(recipeRepository.save(recipe), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Error>(new Error (500, e.toString()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

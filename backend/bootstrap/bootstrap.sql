@@ -33,10 +33,10 @@ CREATE TABLE IF NOT EXISTS recipe (
 
 
 INSERT INTO recipe (user_id, name, serving, image_name) VALUES
-("1", "Egg tarts from the heart", "16", "eggtart.jpg"),
-("1", "Steak that will sway vegans", "2", "steak.jpg"),
-("2", "Brownies that take away the frownies", "16", "brownie.jpg"),
-("3", "Fish that make you go SHEESH", "1", "salmon.jpg");
+("1", "Egg tarts from the heart", "16", "1/eggtart.jpg"),
+("1", "Steak that will sway vegans", "2", "1/steak.jpg"),
+("2", "Brownies that take away the frownies", "16", "2/brownie.jpg"),
+("3", "Fish that make you go SHEESH", "1", "3/salmon.jpg");
 
 DROP TABLE IF EXISTS instruction;
 CREATE TABLE IF NOT EXISTS instruction (

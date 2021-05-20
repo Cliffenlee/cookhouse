@@ -1,14 +1,19 @@
 import { Button } from '@chakra-ui/button'
-import { ArrowForwardIcon, InfoIcon, WarningIcon } from '@chakra-ui/icons'
+import { useDisclosure } from '@chakra-ui/hooks'
+import { ArrowForwardIcon, EditIcon, InfoIcon, WarningIcon } from '@chakra-ui/icons'
 import { Box, Flex, Heading, Text } from '@chakra-ui/layout'
 import { Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger } from '@chakra-ui/popover'
 import { Tag } from '@chakra-ui/tag'
 import React from 'react'
+import EditRecipe from './EditRecipe'
 
 export default function Front({recipe, selector}) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    recipe.instructions.sort(function(a,b) {return a.step - b.step})
+
     return (
         <Flex position="relative" flexDirection="column" overflowY="scroll" overflowX="hidden" className="front" padding={8}>
-            <Heading textTransform="uppercase" mb={8}>{recipe.name}</Heading>
+            <Heading textTransform="uppercase" mb={8}>{recipe.name} <EditIcon color="gray.500" onClick={onOpen} cursor="pointer" _hover={{color: "gray.600"}}/></Heading>
             <Flex alignItems="center" justifyContent="space-between" pr={5}>
                 <Heading size="m">
                     Serving size: {recipe.serving}
@@ -84,6 +89,7 @@ export default function Front({recipe, selector}) {
                     <ArrowForwardIcon/>
                 </Tag>
             </label>
+            <EditRecipe isOpen={isOpen} onClose={onClose} recipe={recipe}/>
         </Flex>
     )
 }

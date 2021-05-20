@@ -131,14 +131,14 @@ class Recipe extends Component {
                             return (
                                 <Box key={index} className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
                                     <BackCover selector={"c"+(index+1)} />
-                                    <Front key={index} recipe={recipe} selector={"c"+(index+1)} />
+                                    <Front recipe={recipe} selector={"c"+(index+1)} />
                                 </Box>
                             )
                         } else {
                             return (
                                 <Box key={index} className="flip" zIndex={recipes.length - parseInt(index)} id={"p"+(index+1)}>
                                     <Back toHomePage={this.toHomePage.bind(this)}recipe={recipes[index+1]} selector={"c"+(index+1)} />
-                                    <Front key={index} recipe={recipe} selector={"c"+(index+1)}/>
+                                    <Front recipe={recipe} selector={"c"+(index+1)}/>
                                 </Box>
                             )
                         }

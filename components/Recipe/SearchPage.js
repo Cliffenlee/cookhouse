@@ -63,7 +63,7 @@ export default function SearchPage({selector, recipes}) {
             </label>
             <Box className="bookmark">
                     <div className="bookmark-front">
-                        My Recipe Book
+                        Contents Page
                     </div>
             </Box>
         </Box>

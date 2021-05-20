@@ -121,9 +121,13 @@ a {
   user-select: none;
 }
 
-/* .image {
-  cursor: pointer;
-} */
+.default-picture-wrapper:hover .default-picture {
+  opacity: 0.8;
+}
+
+.default-picture-wrapper:hover .default-picture-text {
+  color: #4A5568;
+}
 
 .mid-medium {
   font-size: 22px;

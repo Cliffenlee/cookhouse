@@ -176,8 +176,6 @@ public class RecipeController {
             recipe.getTools().clear();
             recipe.getIngredients().clear();
             recipe.getInstructions().clear();
-            System.out.println("after clearing tools, ingredients and instructions");
-            System.out.println(recipe);
 
             // add ingredients to recipe
             List<Object> ingredientList = (List<Object>) body.get("ingredients") == null ? new ArrayList<Object>() : (List<Object>) body.get("ingredients");
@@ -211,7 +209,7 @@ public class RecipeController {
                 recipe.getTools().add(tool);
                 toolRepository.save(tool);
             }
-            
+
             return new ResponseEntity(recipeRepository.save(recipe), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

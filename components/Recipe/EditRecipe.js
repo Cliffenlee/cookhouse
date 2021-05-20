@@ -406,10 +406,10 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
                             {imagePreview ? <DeleteIcon textAlign="start" cursor="pointer" ml={2} color="red.400" onClick={removeImage}/> : ""}
                         </Flex>
                         <Flex mb={4} position="relative" flexDirection="column" justifyContent="center" alignItems="center" cursor="pointer" textAlign="center" borderWidth="2px" height="50%" borderStyle="dotted" p={8} {...getRootProps({ className: 'dropzone' })}>
-                            {imagePreview ? <Image position="absolute" width="100%" left="0" top="50%" transform="translateY(-50%)" src={imagePreview} /> : ""}
-                                <input {...getInputProps()} />
-                                <Text fontSize="lg" color="gray.400" lineHeight="1.2" mb={2}>Drop your image here</Text>
-                                <Text fontSize="xs" color="gray.400" lineHeight="1.2">(Only jpg and png images will be accepted)</Text>
+                            {imagePreview ? <Image position="absolute" maxWidth="100%" maxHeight="100%" left="50%" top="50%" transform="translateX(-50%) translateY(-50%)" src={imagePreview} /> : ""}
+                            <input {...getInputProps()} />
+                            {imagePreview ? "" : <Text fontSize="lg" color="gray.400" lineHeight="1.2" mb={2}>Drop your image here</Text>}
+                            {imagePreview ? "" : <Text fontSize="xs" color="gray.400" lineHeight="1.2">(Only jpg and png images will be accepted)</Text> }
                         </Flex>
                     </Box>
                 </Flex>

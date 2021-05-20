@@ -5,8 +5,8 @@ import { ArrowBackIcon } from '@chakra-ui/icons'
 export default function Back({toHomePage, recipe, selector}) {
     const imageLink = `https://cookhouse-images.s3-ap-southeast-1.amazonaws.com/${recipe.image_name}`
     const bookmark = selector == "c0" ? <div onClick={toHomePage} className="bookmark-back">Return to front</div> : ""
-    recipe.tools.sort(function(a,b) {return a.tool_name > b.tool_name})
-    recipe.ingredients.sort(function(a,b) {return a.description > b.description})
+    recipe.tools.sort((a,b) => a.tool_name.localeCompare(b.tool_name))
+    recipe.ingredients.sort((a,b) => a.description.localeCompare(b.description))
 
     return (
         <Box className="back">
@@ -30,18 +30,22 @@ export default function Back({toHomePage, recipe, selector}) {
                         </Box>
                     </Flex>
                 </Flex>
-                <Flex width="100%" height="20%" mt={2} padding={2} justifyContent="start" alignItems="center" overflowX="auto" overflowY="hidden">
-                    <Box>
-                        <Heading size="md">
+                <Flex width="100%" height="20%" mt={2}  justifyContent="start" alignItems="center">
+                    <Box width="7vw">
+                        <Heading size="md" width="7vw">
                             Tools needed:
                         </Heading>
                     </Box>
+                    <Flex mt={4} p={0} justifyContent="start" alignItems="center" overflowX="scroll" overflowY="hidden">
+                        {recipe.tools.map((tool, index) => {
+                            return (
+                                <Flex p={0} alignItems="center">
+                                    <Tag key={index} colorScheme="green" mx={2}>{tool.tool_name}</Tag>
+                                </Flex>
+                            )
+                        })}
+                    </Flex>
 
-                    {recipe.tools.map((tool, index) => {
-                        return (
-                            <Tag key={index} colorScheme="green" mx={2}>{tool.tool_name}</Tag>
-                        )
-                    })}
                 </Flex>
             </Flex>
             {bookmark}

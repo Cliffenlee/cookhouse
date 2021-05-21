@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/button'
-import { CloseIcon, DeleteIcon, SmallCloseIcon } from '@chakra-ui/icons'
+import { CloseIcon, DeleteIcon, SmallCloseIcon, WarningTwoIcon } from '@chakra-ui/icons'
 import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input'
-import { Box, Flex, List, ListIcon, ListItem, Text } from '@chakra-ui/layout'
+import { Box, Flex, List, ListIcon, ListItem, Text, UnorderedList } from '@chakra-ui/layout'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper } from '@chakra-ui/number-input'
 import { Tag } from '@chakra-ui/tag'
@@ -26,6 +26,8 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
     const [imagePreview, setImagePreview] = useState(undefined)
     const [instructionEditIndex, setInstructionEditIndex] = useState(undefined)
     const [prevInstruction, setPrevInstruction] = useState(undefined)
+    const [fields, setFields] = useState({name: recipe.name, serving: recipe.serving})
+    const [errorMessage, setErrorMessage] = useState()
 
     // ref
     const recipeNameRef = React.createRef()
@@ -146,106 +148,148 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
 
     }
 
+    function handleChange (field, e) {
+        let tempFields =  fields
+        tempFields[field] = e.target.value
+        setFields(tempFields)
+    }
+
+    function handleValidation () {
+        let tempErrors = []
+
+        if (!fields.name || fields.name.trim().length < 1) {
+            tempErrors.push("Missing recipe name!")
+        }
+        if (!fields.serving || parseInt(fields.serving) < 1) {
+            tempErrors.push("Minimum serving is 1!")
+        }
+        if (!ingredients || ingredients.length < 1) {
+            tempErrors.push("At least 1 ingredient required!")
+        }
+        if (!instructions || instructions.length < 1) {
+            tempErrors.push("Missing instructions!")
+        }
+
+        return tempErrors
+    }
+
+    function renderErrors(errors) {
+        setErrorMessage(<Box backgroundColor="red.400" borderRadius="10px" color="white" mb={6} padding={4}>
+            <WarningTwoIcon mb={4}/>
+            <UnorderedList>
+                {errors.map((error, index) => {
+                    return <ListItem key={index}>
+                        {error}
+                    </ListItem>
+                })}
+            </UnorderedList>
+        </Box>)
+    }
+
     async function editRecipe () {
         setIsLoading(true)
         const uuid = recipeImage ? uuidv4() : undefined
-        console.log(uuid)
 
-        console.log(ingredients)
-        console.log(tools)
-        console.log(instructions)
+        const errors = handleValidation()
+        console.log(errors)
+        if (errors.length > 0) {
+            renderErrors(errors)
+        } else {
 
-        try {
-
-            const requestBody = {
-                user_id: 1,
-                recipe_id: recipe.id,
-                serving: parseInt(servingRef.current.value),
-                name: recipeNameRef.current.value,
-                image_name: uuid ? "1/"+uuid.toString() : recipe.image_name,
-                nutrition: {
+            try {
+                setErrorMessage("")
+                const requestBody = {
+                    user_id: 1,
                     recipe_id: recipe.id,
-                    calories: parseInt(caloriesRef.current.value),
-                    protein: parseInt(proteinRef.current.value),
-                    carbohydrates: parseInt(carbohydratesRef.current.value),
-                    fat: parseInt(fatRef.current.value),
-                    cholesterol: parseInt(cholesterolRef.current.value),
-                    sodium: parseInt(sodiumRef.current.value),
-                    sugar: parseInt(sugarRef.current.value),
-                    fiber: parseInt(fiberRef.current.value)
-                },
-                ingredients: ingredients.map(ingredient => {
-                    return {ingredient_name: null, description: ingredient.description}
-                }),
-                instructions: instructions.map((instruction, index) => {
-                    return {step: index+1, instruction: instruction.instruction}
-                }),
-                tools: tools.map(tool => {
-                    return {tool_name: tool.tool_name}
-                })
-            }
-
-
-            // edit recipe in db
-            const dataResponse = await axios.put("http://localhost:8080/recipe", requestBody)
-
-            // upload new image
-            if (recipeImage) {
-                // get presigned url for s3
-                const presignedRequestBody = {
-                    bucket: "cookhouse-images",
-                    key: `1/${uuid}`
+                    serving: parseInt(servingRef.current.value),
+                    name: recipeNameRef.current.value,
+                    image_name: uuid ? "1/"+uuid.toString() : recipe.image_name,
+                    nutrition: {
+                        recipe_id: recipe.id,
+                        calories: parseInt(caloriesRef.current.value),
+                        protein: parseInt(proteinRef.current.value),
+                        carbohydrates: parseInt(carbohydratesRef.current.value),
+                        fat: parseInt(fatRef.current.value),
+                        cholesterol: parseInt(cholesterolRef.current.value),
+                        sodium: parseInt(sodiumRef.current.value),
+                        sugar: parseInt(sugarRef.current.value),
+                        fiber: parseInt(fiberRef.current.value)
+                    },
+                    ingredients: ingredients.map(ingredient => {
+                        return {ingredient_name: null, description: ingredient.description}
+                    }),
+                    instructions: instructions.map((instruction, index) => {
+                        return {step: index+1, instruction: instruction.instruction}
+                    }),
+                    tools: tools.map(tool => {
+                        return {tool_name: tool.tool_name}
+                    })
                 }
 
-                const presignedRequestHeader = {
-                    'Content-Type': 'application/json'
-                }
 
-                console.log("uploading...")
-                const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev/uploadurljs", presignedRequestBody, presignedRequestHeader)
-                console.log(presignedUploadUrl)
-                // console.log(presignedUploadUrl.data.url)
-                const data = {
-                    bucket: "cookhouse-images",
-                    ...presignedUploadUrl.data.data.fields,
-                    'Content-Type': recipeImage.type,
-                    file: recipeImage
-                }
-                var formData = new FormData()
-                for (const name in data) {
-                    formData.append(name, data[name])
-                }
+                // edit recipe in db
+                const dataResponse = await axios.put("http://localhost:8080/recipe", requestBody)
 
-                const uploadResponse = await fetch(presignedUploadUrl.data.data.url, {
-                    method: 'POST',
-                    body: formData
-                }).then((res) => {
-                    if (!res.ok) {
-                        console.log(res)
-                        console.log("error")
-                        // show error toast
-                    throw new Error(res.statusText);
-                    } else {
-                        console.log(res)
-                        console.log("success!")
+                // upload new image
+                if (recipeImage) {
+                    // get presigned url for s3
+                    const presignedRequestBody = {
+                        bucket: "cookhouse-images",
+                        key: `1/${uuid}`
                     }
-                });
-                console.log(uploadResponse)
+
+                    const presignedRequestHeader = {
+                        'Content-Type': 'application/json'
+                    }
+
+                    console.log("uploading...")
+                    const presignedUploadUrl = await axios.post("https://fol3okxax2.execute-api.ap-southeast-1.amazonaws.com/dev/uploadurljs", presignedRequestBody, presignedRequestHeader)
+                    console.log(presignedUploadUrl)
+                    // console.log(presignedUploadUrl.data.url)
+                    const data = {
+                        bucket: "cookhouse-images",
+                        ...presignedUploadUrl.data.data.fields,
+                        'Content-Type': recipeImage.type,
+                        file: recipeImage
+                    }
+                    var formData = new FormData()
+                    for (const name in data) {
+                        formData.append(name, data[name])
+                    }
+
+                    const uploadResponse = await fetch(presignedUploadUrl.data.data.url, {
+                        method: 'POST',
+                        body: formData
+                    }).then((res) => {
+                        if (!res.ok) {
+                            console.log(res)
+                            console.log("error")
+                            // show error toast
+                        throw new Error(res.statusText);
+                        } else {
+                            console.log(res)
+                            console.log("success!")
+                        }
+                    });
+                    console.log(uploadResponse)
+                }
+
+                console.log(dataResponse)
+
+            } catch (responseError) {
+                console.log(responseError)
+                setError(true)
+                // error toast
+            } finally {
+                setIsLoading(false)
             }
-
-            console.log(dataResponse)
-
-        } catch (responseError) {
-            console.log(responseError)
-            setError(true)
-            // error toast
-        } finally {
-            setIsLoading(false)
         }
+
+        setIsLoading(false)
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={function(event) {setFields({});onClose()}}>
             <ModalOverlay />
             <ModalContent maxWidth="40vw" height="80vh">
             <ModalHeader textAlign="center" fontSize="2rem">
@@ -255,14 +299,15 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
 
             {isLoading ?<ModalBody px="3vw"><Flex justifyContent="center" alignItems="center" width="100%" height="100%"><Loader/></Flex></ModalBody>:
             <ModalBody overflow="scroll" justifyContent="center" px="3vw">
+                {errorMessage}
                 <Flex justifyContent="space-between" alignItems="center">
-                    <Input width="70%" variant="flushed" size="lg" ref={recipeNameRef} isRequired={true} placeholder="Recipe name" defaultValue={recipe.name}/>
+                    <Input width="70%" variant="flushed" size="lg" ref={recipeNameRef} isRequired={true} onChange={(event) => handleChange("name", event)}  placeholder="Recipe name" defaultValue={recipe.name}/>
                     <Flex width="20%" flexDirection="column">
                         <Text fontWeight="500" textAlign="start" fontSize="1.2rem" mb="2vh">
                             Serving size
                         </Text>
                         <NumberInput min={0} allowMouseWheel defaultValue={recipe.serving}>
-                            <NumberInputField ref={servingRef}/>
+                            <NumberInputField ref={servingRef} onChange={(event) => handleChange("serving", event)} />
                             <NumberInputStepper>
                                 <NumberIncrementStepper/>
                                 <NumberDecrementStepper/>
@@ -438,7 +483,7 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
                 </Box>
             </ModalBody>}
             <ModalFooter>
-                <Button colorScheme="gray" mr={3} onClick={onClose}>
+                <Button colorScheme="gray" mr={3} onClick={function(event) {setFields({});onClose()}}>
                 Close
                 </Button>
                 <Button colorScheme="blue" onClick={editRecipe}>Save</Button>

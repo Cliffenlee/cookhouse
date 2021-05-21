@@ -195,6 +195,7 @@ export default function NewRecipe({isOpen, onClose}) {
 
         } else {
             try {
+                setErrorMessage("")
                 const requestBody = {
                     user_id: 1,
                     serving: parseInt(servingRef.current.value),

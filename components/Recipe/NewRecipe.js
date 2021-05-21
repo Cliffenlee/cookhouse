@@ -280,8 +280,9 @@ export default function NewRecipe({isOpen, onClose}) {
         setIsLoading(false)
     }
 
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={function(event) {setFields({});onClose()}}>
             <ModalOverlay />
             <ModalContent maxWidth="40vw" height="80vh">
             <ModalHeader textAlign="center" fontSize="2rem">
@@ -475,7 +476,7 @@ export default function NewRecipe({isOpen, onClose}) {
                 </Box>
             </ModalBody>}
             <ModalFooter>
-                <Button colorScheme="gray" mr={3} onClick={onClose}>
+                <Button colorScheme="gray" mr={3} onClick={function(event) {setFields({});onClose()}}>
                 Close
                 </Button>
                 <Button colorScheme="blue" onClick={createRecipe}>Create</Button>

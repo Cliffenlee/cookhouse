@@ -14,7 +14,6 @@ export default function SearchPage({selector, recipes}) {
     }
 
     async function navigate(page) {
-        console.log(page)
         for (let i = 0; i < page+1; i ++) {
             var box = document.getElementById("c"+i)
             box.checked = !box.checked;

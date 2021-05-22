@@ -166,7 +166,7 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
 
     function handleValidation () {
         let tempErrors = []
-
+        console.log(fields)
         if (!fields.name || fields.name.trim().length < 1) {
             tempErrors.push("Missing recipe name!")
         }
@@ -201,7 +201,7 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
 
         toast({
             title: "Recipe edited successfully.",
-            description: "Those changes look good!",
+            description: "Please reload the page.",
             status: "success",
             duration: 5000,
             isClosable: true,

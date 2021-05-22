@@ -192,7 +192,7 @@ export default function NewRecipe({isOpen, onClose}) {
 
         toast({
             title: "Recipe created successfully.",
-            description: "Congrats! A great addition to your recipe book.",
+            description: "Please reload the page.",
             status: "success",
             duration: 5000,
             isClosable: true,

@@ -1,13 +1,13 @@
 import { Button } from '@chakra-ui/button'
 import { CloseIcon, DeleteIcon, SmallCloseIcon, WarningTwoIcon } from '@chakra-ui/icons'
 import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input'
-import { Box, Flex, List, ListIcon, ListItem, Text, UnorderedList } from '@chakra-ui/layout'
+import { Box, Flex, Heading, List, ListIcon, ListItem, Text, UnorderedList } from '@chakra-ui/layout'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper } from '@chakra-ui/number-input'
 import { Tag } from '@chakra-ui/tag'
 import { Textarea } from '@chakra-ui/textarea'
 import axios from 'axios'
-import { Image } from '@chakra-ui/react'
+import { Image, useToast } from '@chakra-ui/react'
 import React, { createRef, useState } from 'react'
 import Loader from '../common/Loader'
 import Error from '../common/Error'
@@ -42,6 +42,9 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
     const sugarRef = React.createRef()
     const fiberRef = React.createRef()
     const servingRef = React.createRef()
+
+    // toast
+    const toast = useToast()
 
     function addTool (event) {
         if (event.key == 'Enter' || event.type=="click") {
@@ -78,7 +81,15 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
 
     function confirmEditInstruction(event) {
         if (event.key == 'Enter') {
+
             event.preventDefault()
+
+            if (event.target.value.trim() == "") {
+                setInstructionEditIndex(undefined)
+                setPrevInstruction(undefined)
+                return
+            }
+
             const newInstruction = instructions[instructionEditIndex-1]
             newInstruction.instruction = event.target.value.trim()
             let newInstructions = instructions
@@ -185,12 +196,23 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
         </Box>)
     }
 
+    function success () {
+        onClose()
+
+        toast({
+            title: "Recipe edited successfully.",
+            description: "Those changes look good!",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          })
+    }
+
     async function editRecipe () {
         setIsLoading(true)
         const uuid = recipeImage ? uuidv4() : undefined
 
         const errors = handleValidation()
-        console.log(errors)
         if (errors.length > 0) {
             renderErrors(errors)
         } else {
@@ -228,7 +250,6 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
 
                 // edit recipe in db
                 const dataResponse = await axios.put("http://localhost:8080/recipe", requestBody)
-                
                 // upload new image
                 if (recipeImage) {
                     // get presigned url for s3
@@ -273,11 +294,10 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
 
                 success()
 
-
-
             } catch (responseError) {
+                console.log(responseError)
                 toast({
-                    title: "Failed to create recipe.",
+                    title: "Failed to edit recipe.",
                     description: "Something went wrong! Please try again.",
                     status: "error",
                     duration: 5000,
@@ -295,14 +315,16 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
         <Modal isOpen={isOpen} onClose={function(event) {setFields({});onClose()}}>
             <ModalOverlay />
             <ModalContent maxWidth="40vw" height="80vh">
-            <ModalHeader textAlign="center" fontSize="2rem">
-                Edit Recipe
+            <ModalHeader fontSize="2rem">
+                <Heading textAlign="center" mb={8}>
+                    Edit Recipe
+                </Heading>
+                {errorMessage}
             </ModalHeader>
             <ModalCloseButton />
 
             {isLoading ?<ModalBody px="3vw"><Flex justifyContent="center" alignItems="center" width="100%" height="100%"><Loader/></Flex></ModalBody>:
             <ModalBody overflow="scroll" justifyContent="center" px="3vw">
-                {errorMessage}
                 <Flex justifyContent="space-between" alignItems="center">
                     <Input width="70%" variant="flushed" size="lg" ref={recipeNameRef} isRequired={true} onChange={(event) => handleChange("name", event)}  placeholder="Recipe name" defaultValue={recipe.name}/>
                     <Flex width="20%" flexDirection="column">

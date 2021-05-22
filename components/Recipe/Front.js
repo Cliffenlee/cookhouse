@@ -13,7 +13,7 @@ export default function Front({recipe, selector}) {
 
     return (
         <Flex position="relative" flexDirection="column" overflowY="scroll" overflowX="hidden" className="front" padding={8}>
-            <Heading textTransform="uppercase" mb={8}>{recipe.name} <EditIcon color="gray.500" onClick={onOpen} cursor="pointer" _hover={{color: "gray.600"}}/></Heading>
+            <Heading textTransform="uppercase" mb={8}>{recipe.name} <EditIcon fontSize={20} color="blue.400" onClick={onOpen} cursor="pointer" _hover={{color: "blue.600"}}/></Heading>
             <Flex alignItems="center" justifyContent="space-between" pr={5}>
                 <Heading size="m">
                     Serving size: {recipe.serving}

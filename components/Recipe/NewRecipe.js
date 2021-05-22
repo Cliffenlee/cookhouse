@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/button'
 import { CloseIcon, DeleteIcon, SmallCloseIcon, WarningTwoIcon } from '@chakra-ui/icons'
 import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input'
-import { Box, Flex, List, ListIcon, ListItem, Text, UnorderedList } from '@chakra-ui/layout'
+import { Box, Flex, Heading, List, ListIcon, ListItem, Text, UnorderedList } from '@chakra-ui/layout'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper } from '@chakra-ui/number-input'
 import { Tag } from '@chakra-ui/tag'
@@ -310,14 +310,16 @@ export default function NewRecipe({isOpen, onClose}) {
         <Modal isOpen={isOpen} onClose={function(event) {setFields({});onClose()}}>
             <ModalOverlay />
             <ModalContent maxWidth="40vw" height="80vh">
-            <ModalHeader textAlign="center" fontSize="2rem">
-                New Recipe
+            <ModalHeader fontSize="2rem">
+                <Heading textAlign="center" mb={8}>
+                    Edit Recipe
+                </Heading>
+                {errorMessage}
             </ModalHeader>
             <ModalCloseButton />
 
             {isLoading ?<ModalBody px="3vw"><Flex justifyContent="center" alignItems="center" width="100%" height="100%"><Loader/></Flex></ModalBody>:
             <ModalBody overflow="scroll" justifyContent="center" px="3vw">
-                {errorMessage}
                 <Flex justifyContent="space-between" alignItems="center">
                     <Input width="70%" variant="flushed" size="lg" ref={recipeNameRef} onChange={(event) => handleChange("name", event)} isRequired={true} placeholder="Recipe name"/>
                     <Flex width="20%" flexDirection="column">

@@ -139,6 +139,7 @@ public class RecipeController {
 
             return new ResponseEntity(recipeRepository.save(recipe), HttpStatus.OK);
         } catch (Exception e) {
+            recipeRepository.deleteById((Integer) body.get("recipe_id"));
             e.printStackTrace();
             return new ResponseEntity<Error>(new Error (500, e.toString()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

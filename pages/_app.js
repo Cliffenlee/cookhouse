@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <Box height="100vh" overflow="hidden">
         {Component.name == "login" ? "" : nav}
-        {Component.name == "login" ? "" : <Background/>}
+        {Component.name == "home" || Component.name == "landing" ? <Background/> : ""}
         <Component {...pageProps} />
       </Box>
     </ChakraProvider>

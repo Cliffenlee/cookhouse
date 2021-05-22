@@ -7,7 +7,7 @@ import { NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInpu
 import { Tag } from '@chakra-ui/tag'
 import { Textarea } from '@chakra-ui/textarea'
 import axios from 'axios'
-import { Image } from '@chakra-ui/react'
+import { Image, useToast } from '@chakra-ui/react'
 import React, { createRef, useState } from 'react'
 import Loader from '../common/Loader'
 import Error from '../common/Error'
@@ -43,6 +43,9 @@ export default function NewRecipe({isOpen, onClose}) {
     const sugarRef = React.createRef()
     const fiberRef = React.createRef()
     const servingRef = React.createRef()
+
+    // toast
+    const toast = useToast()
 
     function addTool (event) {
         if (event.key == 'Enter' || event.type=="click") {
@@ -184,6 +187,23 @@ export default function NewRecipe({isOpen, onClose}) {
         </Box>)
     }
 
+    function success () {
+        onClose()
+
+        toast({
+            title: "Recipe created successfully.",
+            description: "Congrats! A great addition to your recipe book.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          })
+
+        setFields({})
+        setTools([])
+        setInstructions([])
+        setIngredients([])
+    }
+
     async function createRecipe () {
         setIsLoading(true)
         const uuid = recipeImage ? uuidv4() : undefined
@@ -258,8 +278,6 @@ export default function NewRecipe({isOpen, onClose}) {
                     }).then((res) => {
                         if (!res.ok) {
                             console.log(res)
-                            console.log("error")
-                            // show error toast
                         throw new Error(res.statusText);
                         } else {
                             console.log(res)
@@ -269,10 +287,16 @@ export default function NewRecipe({isOpen, onClose}) {
                     console.log(uploadResponse)
                 }
 
+                success()
+
             } catch (responseError) {
-                console.log(responseError)
-                setError(true)
-                // error toast
+                toast({
+                    title: "Failed to create recipe.",
+                    description: "Something went wrong! Please try again.",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                  })
             } finally {
                 setIsLoading(false)
             }

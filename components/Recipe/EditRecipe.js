@@ -21,7 +21,6 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
     const [ingredients, setIngredients] = useState(recipe.ingredients)
     const [tools, setTools] = useState(recipe.tools)
     const [instructions, setInstructions] = useState(recipe.instructions)
-    const [error, setError] = useState(false)
     const [recipeImage, setRecipeImage] = useState(undefined)
     const [imagePreview, setImagePreview] = useState(undefined)
     const [instructionEditIndex, setInstructionEditIndex] = useState(undefined)
@@ -229,7 +228,7 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
 
                 // edit recipe in db
                 const dataResponse = await axios.put("http://localhost:8080/recipe", requestBody)
-
+                
                 // upload new image
                 if (recipeImage) {
                     // get presigned url for s3
@@ -263,8 +262,6 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
                     }).then((res) => {
                         if (!res.ok) {
                             console.log(res)
-                            console.log("error")
-                            // show error toast
                         throw new Error(res.statusText);
                         } else {
                             console.log(res)
@@ -274,12 +271,18 @@ export default function EditRecipe({isOpen, onClose, recipe}) {
                     console.log(uploadResponse)
                 }
 
-                console.log(dataResponse)
+                success()
+
+
 
             } catch (responseError) {
-                console.log(responseError)
-                setError(true)
-                // error toast
+                toast({
+                    title: "Failed to create recipe.",
+                    description: "Something went wrong! Please try again.",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                  })
             } finally {
                 setIsLoading(false)
             }

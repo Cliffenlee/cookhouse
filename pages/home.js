@@ -43,13 +43,16 @@ export default class home extends Component {
 
         if (loading) {
             return (
-                <Loader/>
+                <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
+                    <Loader/>
+                </Flex>
+
             )
         }
 
         if (error) {
             return (
-                <Error/>
+                    <Error/>
             )
         }
 

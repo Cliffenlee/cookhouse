@@ -15,11 +15,9 @@ function MyApp({ Component, pageProps }) {
         <title>Cookhouse</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Box height="100vh" overflow="hidden">
         {Component.name == "login" ? "" : nav}
         {Component.name == "home" || Component.name == "landing" ? <Background/> : ""}
         <Component {...pageProps} />
-      </Box>
     </ChakraProvider>
   )
 

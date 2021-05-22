@@ -129,18 +129,27 @@ a {
   color: #4A5568;
 }
 
-.mid-medium {
-  font-size: 22px;
-}
-
-.big-medium {
-  font-size: 36px
-}
 
 hr {
   width: 100%;
   border-top: #cdcdd1 solid 1px;
   padding: 5px 0;
+}
+
+.profile {
+  margin: 0;
+  padding: 0;
+  height: calc(60vh - 80px);
+  width: 100%;
+  overflow: hidden;
+}
+
+.profile-recipe {
+  min-height: calc(100vh - 80px);
+}
+
+.profile-achievements {
+  min-height: calc(100vh - 80px);
 }
 
 .body {

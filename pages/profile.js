@@ -2,6 +2,7 @@ import { Image } from '@chakra-ui/image'
 import { Box, Divider, Flex, Heading, Text } from '@chakra-ui/layout'
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs'
 import axios from 'axios'
+import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Loader from '../components/common/Loader'
 
@@ -33,6 +34,17 @@ export default function profile() {
                 <Loader/>
             </Flex>
         )
+    }
+
+    function moveToRecipe(index) {
+        console.log(index)
+        Router.push({
+            pathname: "/recipe",
+            query: {
+                index: index,
+                user_id: 1
+            }
+        })
     }
 
     return (
@@ -78,7 +90,7 @@ export default function profile() {
                                     {recipes.map((recipe, index) => {
                                         const imageLink = recipe.image_name ? `https://cookhouse-images.s3-ap-southeast-1.amazonaws.com/${recipe.image_name}` : "/assets/missing.jpg"
                                         return (
-                                            <Flex flexDirection="column" key={index} height="40vh" width="30vh" background="white" my="5vh" mr="4vw">
+                                            <Flex cursor="pointer" onClick={() => moveToRecipe(index)} flexDirection="column" key={index} height="40vh" width="30vh" background="white" my="5vh" mr="4vw">
                                                 {recipe.image_name ? <Image height="60%" width="100%" objectFit="cover" src={imageLink}/> :
                                                     <Box position="relative" height="60%" width="100%" textAlign="center">
                                                         <Image height="100%" width="100%" objectFit="cover" src={imageLink} opacity="0.2"/>
@@ -98,8 +110,10 @@ export default function profile() {
                             </Flex>
                         </TabPanel>
                         <TabPanel padding={0}>
-                            <Flex className="profile-achievements" width="100vw" background="gray.100">
-                                Achievements here
+                            <Flex className="profile-achievements" width="100vw" background="gray.100" px="20vw" py="5vh">
+                                <Heading mb={5}>
+                                    Achievements
+                                </Heading>
                             </Flex>
                         </TabPanel>
                     </TabPanels>

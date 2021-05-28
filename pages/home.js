@@ -58,24 +58,23 @@ export default class home extends Component {
 
         return (
             <Flex flexDirection="column" width="100vw" overflowX="scroll">
-                <Box>
-                    <div className="home-shadow"/>
-                </Box>
-                <Flex position="relative" width="100vw" height="80vh" mt="calc( (100vh - 80vh + 80px) / 2)" background="white" alignItems="center" padding={8}>
-                    <Box position="absolute" top="0" left="0" transform="translateX(50%) translateY(50%)" mt={20}>
-                        <Heading fontWeight="300" color="orange.400" size="3xl">
+                <Flex flexDirection="column" width="100vw" height="100vh" background="white" justifyContent="center" padding={8}>
+                    <Box>
+                        <Heading fontWeight="300" color="orange.400" size="3xl" ml="5vw" mb={8}>
                             Fresh faces
                         </Heading>
                     </Box>
+                    <Flex width="100%" height="50vh" background="white" alignItems="center" overflowX="scroll">
                     {recipes.map((recipe, index) => {
                         const imageLink = recipe.image_name ? `https://cookhouse-images.s3-ap-southeast-1.amazonaws.com/${recipe.image_name}` : "/assets/missing.jpg"
-                        return (<Box height="30%" mr={8}>
+                        return (<Box cursor="pointer" height="100%" width="100%" mr={8}>
                                 <Image src={imageLink} maxHeight="100%"/>
-                                <Text color="orange.400" fontSize="xl" lineHeight="1.2" mt={8}>
+                                <Text textTransform="uppercase" color="orange.400" fontSize="xl" lineHeight="1.2" mt={8}>
                                     {recipe.name}
                                 </Text>
                             </Box>)
                     })}
+                    </Flex>
                 </Flex>
             </Flex>
         )

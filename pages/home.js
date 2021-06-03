@@ -1,5 +1,8 @@
+import { SearchIcon } from '@chakra-ui/icons';
 import { Image } from '@chakra-ui/image';
+import { Input, InputLeftElement } from '@chakra-ui/input';
 import { Box, Flex, Heading, Text } from '@chakra-ui/layout';
+import { InputGroup } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { Component } from 'react'
 import Error from '../components/common/Error';
@@ -57,24 +60,33 @@ export default class home extends Component {
         }
 
         return (
-            <Flex flexDirection="column" width="100vw" overflowX="scroll">
-                <Flex flexDirection="column" width="100vw" height="100vh" background="white" justifyContent="center" padding={8}>
-                    <Box>
-                        <Heading fontWeight="300" color="orange.400" size="3xl" ml="5vw" mb={8}>
-                            Fresh faces
-                        </Heading>
-                    </Box>
-                    <Flex width="100%" height="50vh" background="white" alignItems="center" overflowX="scroll">
-                    {recipes.map((recipe, index) => {
-                        const imageLink = recipe.image_name ? `https://cookhouse-images.s3-ap-southeast-1.amazonaws.com/${recipe.image_name}` : "/assets/missing.jpg"
-                        return (<Box cursor="pointer" height="100%" width="100%" mr={8}>
-                                <Image src={imageLink} maxHeight="100%"/>
-                                <Text textTransform="uppercase" color="orange.400" fontSize="xl" lineHeight="1.2" mt={8}>
+            <Flex flexDirection="column" width="100vw" height="100vh" background="white" justifyContent="center" padding="10vw">
+                <Flex justifyContent="center">
+                    <InputGroup width="60vw" size="lg" mb={20}>
+                        <InputLeftElement
+                        pointerEvents="none"
+                        children={ <SearchIcon color="blackAlpha.500"/> }/>
+                        <Input boxShadow="0 0 5px #808080" color={'blackAlpha.700'} focusBorderColor="blue.400" placeholder="Search for a recipe"/>
+                    </InputGroup>
+                </Flex>
+                <Box>
+                    <Heading fontWeight="300" color="orange.400" size="3xl" ml="5vw" mb={8}>
+                        Popular Recipes
+                    </Heading>
+                </Box>
+                <Flex position="relative" height="50vh" background="white" alignItems="center" overflowX="auto">
+                {recipes.map((recipe, index) => {
+                    const imageLink = recipe.image_name ? `https://cookhouse-images.s3-ap-southeast-1.amazonaws.com/${recipe.image_name}` : "/assets/missing.jpg"
+                    return (<Flex background="orange.300" _hover={{background: "orange.400"}} textAlign="center" flexDirection="column" position="relative" transition="0.5s" cursor="pointer" height="100%" width="30%" mr={8}>
+                            <Image src={imageLink} height="70%" width="50vw" objectFit="cover"/>
+                            {recipe.image_name ? "" : <Box position="absolute" color="gray.700" top="35%" left="50%" transform="translateX(-50%) translateY(-50%)"><Text fontSize="md" lineHeight="1.2">Recipe image unavailable.</Text></Box>}
+                            <Box width="100%" px={8}>
+                                <Text textTransform="uppercase" color="white" fontSize="xl" lineHeight="1.2" mt={8}>
                                     {recipe.name}
                                 </Text>
-                            </Box>)
-                    })}
-                    </Flex>
+                            </Box>
+                        </Flex>)
+                })}
                 </Flex>
             </Flex>
         )

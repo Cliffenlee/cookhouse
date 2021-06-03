@@ -8,7 +8,7 @@ import NavBarHome from '../components/NavBar/NavBarHome'
 
 
 function MyApp({ Component, pageProps }) {
-  const nav = Component.name == "landing" ? <NavBarLanding/> : Component.name == "home" ? <NavBarHome/> : <NavBar/>
+  const nav = Component.name == "landing" ? <NavBarLanding/> : <NavBar/>
   return (
     <ChakraProvider>
       <Head>
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
         {Component.name == "login" ? "" : nav}
-        {Component.name == "home" || Component.name == "landing" ? <Background/> : ""}
+        {Component.name == "landing" ? <Background/> : ""}
         <Component {...pageProps} />
     </ChakraProvider>
   )

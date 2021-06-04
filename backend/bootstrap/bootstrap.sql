@@ -11,13 +11,14 @@ CREATE TABLE IF NOT EXISTS users (
   	id int auto_increment NOT NULL,
 	name VARCHAR(40) NOT NULL,
 	email VARCHAR(40) UNIQUE NOT NULL,
+	password VARCHAR(40) NOT NULL,
   	PRIMARY KEY (id)
 );
 
-INSERT INTO users (name, email) VALUES
-("Patrick", "tricksterpatrick@gmail.com"),
-("Mariah", "mariahnotcarey@gmail.com"),
-("Hummington92", "twittingbird@gmail.com");
+INSERT INTO users (name, email, password) VALUES
+("Patrick", "tricksterpatrick@gmail.com", "123456"),
+("Mariah", "mariahnotcarey@gmail.com", "000000"),
+("Hummington92", "twittingbird@gmail.com", "111111");
 
 
 DROP TABLE IF EXISTS recipe;

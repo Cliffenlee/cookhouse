@@ -24,7 +24,11 @@ public @Data class User {
     @Size(min=1, message = "User's email length must be more than 0!")
     @Column(unique = true)
     private String email;
-    
+
+    @NotNull(message = "User's password cannto be null!")
+    @Size(min = 6, message = "User's password length must be more than 6!")
+    private String password;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<Recipe> recipes;
 }

@@ -114,7 +114,8 @@ class Recipe extends Component {
         }
 
         return (
-        <Box className="body">
+        <Box position="relative" className="body">
+            <Box zIndex="-1" position="absolute" top="0" left="0" width="100%" height="100%" background="#FFFAF0"/>
             <Box className="book">
             <input className="checkbox" onChange={this.handleCheck} type="checkbox" id="c0"/>
             {recipes.map((recipe, index)=> {

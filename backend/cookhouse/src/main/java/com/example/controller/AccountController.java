@@ -6,6 +6,7 @@ import com.example.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ public class AccountController {
     @Autowired
     UserRepository userRepository;
 
+    @CrossOrigin(origins = {"http://localhost:3000", "https://cook-house.netlify.app"})
     @PostMapping("/login")
     public ResponseEntity login (@RequestBody HashMap body) {
 

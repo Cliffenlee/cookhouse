@@ -12,21 +12,6 @@ export default function NavBar() {
     const {isOpen, onOpen, onClose} = useDisclosure()
     return (
         <Flex className="nav-bar">
-            <Drawer placement="left" onClose={onClose} isOpen={isOpen} >
-                <DrawerOverlay/>
-                <DrawerContent>
-                    <DrawerHeader borderBottomWidth="1px">
-                        Menu
-                    </DrawerHeader>
-                    <DrawerBody>
-                        <p>Options</p>
-                        <p>Options</p>
-                        <p>Options</p>
-                        <p>Options</p>
-                    </DrawerBody>
-                </DrawerContent>
-            </Drawer>
-            <HamburgerIcon onClick={onOpen} fontSize="2rem" style={{cursor:"pointer"}}/>
             <Logo />
             <Flex className="nav-links">
                 <NavBarLink name="MY RECIPES" link="/recipes" />

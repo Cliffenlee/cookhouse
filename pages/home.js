@@ -77,7 +77,7 @@ export default class home extends Component {
                 <Flex position="relative" height="50vh" background="white" alignItems="center" overflowX="auto">
                 {recipes.map((recipe, index) => {
                     const imageLink = recipe.image_name ? `https://cookhouse-images.s3-ap-southeast-1.amazonaws.com/${recipe.image_name}` : "/assets/missing.jpg"
-                    return (<Flex background="orange.300" _hover={{background: "orange.400"}} textAlign="center" flexDirection="column" position="relative" transition="0.5s" cursor="pointer" height="100%" width="30%" mr={8}>
+                    return (<Flex key={index} background="orange.300" _hover={{background: "orange.400"}} textAlign="center" flexDirection="column" position="relative" transition="0.5s" cursor="pointer" height="100%" width="30%" mr={8}>
                             <Image src={imageLink} height="70%" width="50vw" objectFit="cover"/>
                             {recipe.image_name ? "" : <Box position="absolute" color="gray.700" top="35%" left="50%" transform="translateX(-50%) translateY(-50%)"><Text fontSize="md" lineHeight="1.2">Recipe image unavailable.</Text></Box>}
                             <Box width="100%" px={8}>

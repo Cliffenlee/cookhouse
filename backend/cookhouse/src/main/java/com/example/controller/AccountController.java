@@ -31,13 +31,13 @@ public class AccountController {
             Optional<User> user = userRepository.findByEmail(email);
 
             if (!user.isPresent()) {
-                return new ResponseEntity<Error>(new Error(404, "User not found"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<Error>(new Error(404, "User not found"), HttpStatus.OK);
             }
 
             if (password.equals(user.get().getPassword())) {
                 return new ResponseEntity<User>(user.get(), HttpStatus.OK);
             } else {
-                return new ResponseEntity<Error>(new Error(500, "Wrong password"), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<Error>(new Error(500, "Wrong password"), HttpStatus.OK);
             }
         } catch (Exception e) {
             return new ResponseEntity<Error>(new Error(500, e.toString()), HttpStatus.INTERNAL_SERVER_ERROR);

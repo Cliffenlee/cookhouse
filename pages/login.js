@@ -2,6 +2,7 @@ import { Button } from '@chakra-ui/button'
 import { Image } from '@chakra-ui/image'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Heading, Text } from '@chakra-ui/layout'
+import { useToast } from '@chakra-ui/toast'
 import axios from 'axios'
 import Router from 'next/router'
 import { createRef } from 'react'
@@ -10,6 +11,7 @@ export default function login() {
 
     const emailRef = createRef()
     const passwordRef = createRef()
+    const toast = useToast()
 
     async function userLogin() {
         // Router.push('/home')
@@ -21,10 +23,30 @@ export default function login() {
             email: emailRef.current.value,
             password: passwordRef.current.value
         }
-        console.log(requestBody)
 
-        const response = await axios.post("http://localhost:8080/login", requestBody)
-        console.log(response)
+        try {
+            const response = await axios.post("http://localhost:8080/login", requestBody)
+            if (response.data.id) {
+                // save user data to local storage
+                Router.push('/home')
+            } else {
+                toast({
+                    title: "Login failed",
+                    description: response.data.error,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
+        } catch (responseError) {
+            toast({
+                title: "Login failed",
+                description: "Something went wrong, please try again.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            })
+        }
     }
 
     function validate() {
@@ -41,7 +63,7 @@ export default function login() {
                 {/* <Image src="/assets/login.jpg" position="absolute" zIndex="-1" width="100vw"/> */}
                 <Flex width="65%" height="80%">
                     <Flex width="50%" height="100%" borderStartRadius="15px" overflow="hidden" justifyContent="center" alignItems="center">
-                        <Image src="/assets/login2.jpg" minWidth="100%" minHeight="100%" borderStartRadius="15px"/>
+                        <Image src="/assets/login2.jpg" width="100%" height="100%" objectFit="cover" borderStartRadius="15px"/>
                     </Flex>
                     <Flex position="relative" flexDirection="column" alignItems="center" width="50%" height="100%" background="white" borderEndRadius="15px">
                         <Heading cursor="pointer" onClick={index} position="absolute" top="15%" left="50%" transform="translateX(-50%)"size="2xl" fontFamily="Artbrush" fontWeight="400">
